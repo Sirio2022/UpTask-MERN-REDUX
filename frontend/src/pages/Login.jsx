@@ -8,7 +8,7 @@ export default function Login() {
         <span className="text-slate-700">proyectos</span>{' '}
       </h1>
 
-      <form className="mt-20 bg-white shadow rounded-lg p-10">
+      <form className="mt-10 bg-white shadow rounded-lg p-10">
         <div className="my-5">
           <label
             htmlFor="email"

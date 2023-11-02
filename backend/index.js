@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
+import cors from 'cors';
 
 import usuarioRoutes from './routes/usuarioRoutes.js';
 import proyectoRoutes from './routes/proyectoRoutes.js';
@@ -12,6 +13,21 @@ app.use(express.json());
 // Connect Database
 dotenv.config();
 connectDB();
+
+// Enable CORS
+const whitelist = [process.env.FRONTEND_URL];
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Revisar si la petición viene de un servidor que está en whitelist
+    const existe = whitelist.some((dominio) => dominio === origin);
+    if (existe) {
+      callback(null, true);
+    } else {
+      callback(new Error('No permitido por CORS'));
+    }
+  },
+};
+app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/usuarios', usuarioRoutes);
