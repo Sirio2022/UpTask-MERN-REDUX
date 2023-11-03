@@ -1,14 +1,76 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import Alerta from '../components/Alerta';
+import { loginAction } from '../redux/login';
+import { clearError } from '../redux/login';
+import { autenticarUsuario } from '../redux/login';
 
 export default function Login() {
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [alerta, setAlerta] = useState({});
+  const [timeOut, setTimeOut] = useState(null);
 
+  const navigate = useNavigate();
 
+  const dispatch = useDispatch();
 
+  const { error } = useSelector((state) => state.login);
+
+  useEffect(() => {
+    const autenticar = async () => {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        return;
+      }
+
+      if (token) {
+        dispatch(autenticarUsuario());
+      }
+    };
+
+    autenticar();
+  }, [dispatch]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validar
+    if ([email, password].includes('')) {
+      setAlerta({
+        error: true,
+        msg: 'Todos los campos son obligatorios',
+      });
+      return;
+    }
+
+    try {
+      dispatch(loginAction(email, password));
+
+      if (error) {
+        setAlerta({
+          error: true,
+          msg: error,
+        });
+
+        setTimeOut(() =>
+          setTimeout(() => {
+            setAlerta({});
+            dispatch(clearError());
+          }, 3000)
+        );
+
+        return;
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  const { msg } = alerta;
 
   return (
     <>
@@ -17,7 +79,12 @@ export default function Login() {
         <span className="text-slate-700">proyectos</span>{' '}
       </h1>
 
-      <form className="mt-10 bg-white shadow rounded-lg p-10">
+      {msg && <Alerta alerta={alerta} />}
+
+      <form
+        className="mt-10 bg-white shadow rounded-lg p-10"
+        onSubmit={handleSubmit}
+      >
         <div className="my-5">
           <label
             htmlFor="email"
@@ -31,7 +98,7 @@ export default function Login() {
             id="email"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="my-5">
@@ -47,7 +114,7 @@ export default function Login() {
             id="password"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
 
