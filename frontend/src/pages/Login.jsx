@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Alerta from '../components/Alerta';
 import { loginAction } from '../redux/login';
@@ -11,9 +11,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [alerta, setAlerta] = useState({});
-  const [timeOut, setTimeOut] = useState(null);
-
-  const navigate = useNavigate();
+  const [, setTimeOut] = useState(null);
 
   const dispatch = useDispatch();
 
