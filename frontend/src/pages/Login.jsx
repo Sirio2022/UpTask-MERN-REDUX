@@ -1,6 +1,15 @@
+import { useState } from 'react';
+
 import { Link } from 'react-router-dom';
 
 export default function Login() {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+
+
+
   return (
     <>
       <h1 className="text-sky-600 font-black text-6xl capitalize">
@@ -21,6 +30,8 @@ export default function Login() {
             placeholder="Email de registro"
             id="email"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
           />
         </div>
         <div className="my-5">
@@ -35,6 +46,8 @@ export default function Login() {
             placeholder="Ingresa tu password"
             id="password"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
           />
         </div>
 
