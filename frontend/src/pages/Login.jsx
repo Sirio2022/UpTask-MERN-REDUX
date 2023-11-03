@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Alerta from '../components/Alerta';
-import { loginAction } from '../redux/login';
-import { clearError } from '../redux/login';
-import { autenticarUsuario } from '../redux/login';
+import { loginAction } from '../redux/loginSlice';
+import { clearError } from '../redux/loginSlice';
+import { autenticarUsuario } from '../redux/perfilSlice';
 
 export default function Login() {
   const [email, setEmail] = useState('');
