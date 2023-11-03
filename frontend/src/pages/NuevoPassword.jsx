@@ -14,7 +14,7 @@ export default function NuevoPassword() {
   useEffect(() => {
     const comprobarToken = async () => {
       try {
-        await clienteAxios.get(`/api/usuarios/olvidar-password/${token}`);
+        await clienteAxios.get(`/usuarios/olvidar-password/${token}`);
 
         setTokenValido(true);
       } catch (error) {
