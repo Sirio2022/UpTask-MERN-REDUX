@@ -13,6 +13,7 @@ export default function ConfirmarCuenta() {
   useEffect(() => {
     const confirmarCuenta = async () => {
       try {
+        //TODO: Mover hacia un cliente axios
         const { data } = await axios(
           `${import.meta.env.VITE_BACKEND_URL}/api/usuarios/confirmar/${id}`
         );

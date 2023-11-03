@@ -39,6 +39,7 @@ export default function Registrar() {
 
     //Registrar usuario
     try {
+      //TODO: Mover hacia un cliente axios
       const { data } = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/usuarios`,
         {
