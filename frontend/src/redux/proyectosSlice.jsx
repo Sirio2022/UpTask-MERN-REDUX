@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import clienteAxios from '../config/clienteAxios';
 
 const initialState = {
-  proyectos: {},
+  proyectos: [],
   error: '',
   alerta: {},
 };
