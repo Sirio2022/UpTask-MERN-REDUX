@@ -3,6 +3,7 @@ import clienteAxios from '../config/clienteAxios';
 
 const initialState = {
   proyectos: [],
+  proyecto: {},
   error: '',
   alerta: {},
 };
@@ -15,7 +16,7 @@ const proyectosSlice = createSlice({
       state.proyectos = action.payload;
     },
     crearProyecto: (state, action) => {
-      state.proyectos = action.payload;
+      state.proyecto = action.payload;
     },
     eliminarProyecto: (state, action) => {
       state.proyectos = state.proyectos.filter(
