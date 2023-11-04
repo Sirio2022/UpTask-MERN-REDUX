@@ -6,6 +6,9 @@ import OlvidePassword from './pages/OlvidePassword';
 import NuevoPassword from './pages/NuevoPassword';
 import ConfirmarCuenta from './pages/ConfirmarCuenta';
 
+import RutaProtegida from './layouts/RutaProtegida';
+import Proyectos from './pages/Proyectos';
+
 function App() {
   return (
     <BrowserRouter>
@@ -16,6 +19,10 @@ function App() {
           <Route path="olvide-password" element={<OlvidePassword />} />
           <Route path="olvide-password/:token" element={<NuevoPassword />} />
           <Route path="confirmar/:id" element={<ConfirmarCuenta />} />
+        </Route>
+
+        <Route path="/proyectos" element={<RutaProtegida />}>
+          <Route index element={<Proyectos />} />
         </Route>
       </Routes>
     </BrowserRouter>

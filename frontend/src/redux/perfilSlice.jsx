@@ -2,7 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import clienteAxios from '../config/clienteAxios';
 
 const initialState = {
-  usuario: {},
+  usuario: localStorage.getItem('perfil')
+    ? JSON.parse(localStorage.getItem('perfil'))
+    : {},
   error: '',
 };
 
@@ -37,6 +39,7 @@ export const autenticarUsuario = () => async (dispatch) => {
   try {
     const { data } = await clienteAxios.get('/usuarios/perfil', config);
     dispatch(usuario(data));
+    localStorage.setItem('perfil', JSON.stringify(data));
   } catch (error) {
     dispatch(
       authError(

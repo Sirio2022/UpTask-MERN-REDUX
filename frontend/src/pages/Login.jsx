@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Alerta from '../components/Alerta';
 import { loginAction } from '../redux/loginSlice';
@@ -14,6 +14,7 @@ export default function Login() {
   const [, setTimeOut] = useState(null);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { error } = useSelector((state) => state.login);
 
@@ -27,11 +28,12 @@ export default function Login() {
 
       if (token) {
         dispatch(autenticarUsuario());
+        navigate('/proyectos');
       }
     };
 
     autenticar();
-  }, [dispatch]);
+  }, [dispatch, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
