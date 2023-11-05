@@ -88,3 +88,26 @@ export const crearProyectoAction = (proyecto) => async (dispatch) => {
     );
   }
 };
+
+export const obtenerProyectosAction = () => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  };
+  try {
+    const { data } = await clienteAxios.get('/proyectos', config);
+    dispatch(obtenerProyectos(data));
+  } catch (error) {
+    dispatch(
+      proyectoError(
+        error.response && error.response.data.msg
+          ? error.response.data.msg
+          : error.message
+      )
+    );
+  } finally {
+    dispatch(clearError());
+  }
+};
