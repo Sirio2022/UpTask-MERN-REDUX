@@ -93,6 +93,8 @@ export const crearProyectoAction = (proyecto) => async (dispatch) => {
           : error.message
       )
     );
+  } finally {
+    dispatch(clearError());
   }
 };
 
@@ -144,7 +146,6 @@ export const obtenerProyectoAction = (id) => async (dispatch) => {
 };
 
 export const actualizarProyectoAction = (proyecto) => async (dispatch) => {
-  
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -175,5 +176,7 @@ export const actualizarProyectoAction = (proyecto) => async (dispatch) => {
           : error.message
       )
     );
+  } finally {
+    dispatch(clearError());
   }
 };
