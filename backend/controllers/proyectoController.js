@@ -17,9 +17,9 @@ const nuevoProyecto = async (req, res) => {
   proyecto.creador = req.usuario._id;
 
   try {
-    const almacenarProyecto = await proyecto.save();
+    await proyecto.save();
 
-    res.status(201).json(almacenarProyecto);
+    res.status(201).json({ msg: 'Proyecto creado correctamente', proyecto });
   } catch (error) {
     console.log(error);
   }
@@ -37,17 +37,7 @@ const obtenerProyecto = async (req, res) => {
       return res.status(401).json({ msg: error.message });
     }
 
-    // Obtener tareas del proyecto
-    const tareas = await Tarea.find({ proyecto: req.params.id }).sort({
-      createdAt: -1,
-    });
-
-    const proyectoConTareas = {
-      ...proyecto._doc,
-      tareas,
-    };
-
-    res.json(proyectoConTareas);
+    res.json(proyecto);
   } catch (error) {
     console.log(error);
   }
@@ -71,7 +61,10 @@ const actualizarProyecto = async (req, res) => {
       { new: true }
     );
 
-    res.json(proyectoActualizado);
+    res.json({
+      msg: 'Proyecto actualizado correctamente',
+      proyectoActualizado,
+    });
   } catch (error) {
     console.log(error);
   }

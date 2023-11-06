@@ -4,6 +4,8 @@ import clienteAxios from '../config/clienteAxios';
 const initialState = {
   proyectos: [],
   proyecto: {},
+  proyectoCreado: {},
+  proyectoActualizado: {},
   error: '',
   alerta: {},
 };
@@ -16,6 +18,9 @@ const proyectosSlice = createSlice({
       state.proyectos = action.payload;
     },
     crearProyecto: (state, action) => {
+      state.proyectoCreado = action.payload;
+    },
+    obtenerProyecto: (state, action) => {
       state.proyecto = action.payload;
     },
     eliminarProyecto: (state, action) => {
@@ -27,6 +32,7 @@ const proyectosSlice = createSlice({
       state.proyectos = state.proyectos.map((proyecto) =>
         proyecto._id === action.payload._id ? action.payload : proyecto
       );
+      state.proyectoActualizado = action.payload;
     },
     proyectoError: (state, action) => {
       state.error = action.payload;
@@ -42,6 +48,7 @@ const proyectosSlice = createSlice({
 
 export const {
   obtenerProyectos,
+  obtenerProyecto,
   crearProyecto,
   eliminarProyecto,
   actualizarProyecto,
@@ -68,10 +75,10 @@ export const crearProyectoAction = (proyecto) => async (dispatch) => {
   };
   try {
     const { data } = await clienteAxios.post('/proyectos', proyecto, config);
-    dispatch(crearProyecto(data));
+    dispatch(crearProyecto(data.proyecto));
     dispatch(
       mostrarAlertaAction({
-        msg: 'Proyecto creado correctamente',
+        msg: data.msg,
         error: false,
       })
     );
@@ -109,5 +116,64 @@ export const obtenerProyectosAction = () => async (dispatch) => {
     );
   } finally {
     dispatch(clearError());
+  }
+};
+
+export const obtenerProyectoAction = (id) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  };
+  try {
+    const { data } = await clienteAxios.get(`/proyectos/${id}`, config);
+
+    dispatch(obtenerProyecto(data));
+  } catch (error) {
+    dispatch(
+      proyectoError(
+        error.response && error.response.data.msg
+          ? error.response.data.msg
+          : error.message
+      )
+    );
+  } finally {
+    dispatch(clearError());
+  }
+};
+
+export const actualizarProyectoAction = (proyecto) => async (dispatch) => {
+  
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  };
+  try {
+    const { data } = await clienteAxios.put(
+      `/proyectos/${proyecto._id}`,
+      proyecto,
+      config
+    );
+    dispatch(actualizarProyecto(data));
+    dispatch(
+      mostrarAlertaAction({
+        msg: data.msg,
+        error: false,
+      })
+    );
+    setTimeout(() => {
+      dispatch(mostrarAlerta({}));
+    }, 3000);
+  } catch (error) {
+    dispatch(
+      proyectoError(
+        error.response && error.response.data.msg
+          ? error.response.data.msg
+          : error.message
+      )
+    );
   }
 };

@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { mostrarAlertaAction } from '../redux/proyectosSlice';
-import { crearProyectoAction, clearError } from '../redux/proyectosSlice';
+import {
+  crearProyectoAction,
+  clearError,
+  actualizarProyectoAction,
+} from '../redux/proyectosSlice';
 
 import Alerta from './Alerta';
 
@@ -12,10 +16,32 @@ export default function FormularioProyecto() {
   const [fechaEntrega, setFechaEntrega] = useState('');
   const [cliente, setCliente] = useState('');
 
+  const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { alerta, error } = useSelector((state) => state.proyectos);
+  const { alerta, error, proyecto } = useSelector((state) => state.proyectos);
+  const {
+    nombre: nombreProyecto,
+    descripcion: descripcionProyecto,
+    fechaEntrega: fechaEntregaProyecto,
+    cliente: clienteProyecto,
+  } = proyecto;
+
+  useEffect(() => {
+    if (id) {
+      setNombre(nombreProyecto);
+      setDescripcion(descripcionProyecto);
+      setFechaEntrega(fechaEntregaProyecto?.split('T')[0]);
+      setCliente(clienteProyecto);
+    }
+  }, [
+    id,
+    nombreProyecto,
+    descripcionProyecto,
+    fechaEntregaProyecto,
+    clienteProyecto,
+  ]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,25 +66,49 @@ export default function FormularioProyecto() {
       );
     }
 
-    try {
-      dispatch(
-        crearProyectoAction({
-          nombre,
-          descripcion,
-          fechaEntrega,
-          cliente,
-        })
-      );
-      setNombre('');
-      setDescripcion('');
-      setFechaEntrega('');
-      setCliente('');
-      setTimeout(() => {
-        dispatch(clearError());
-        navigate('/proyectos');
-      }, 5000);
-    } catch (error) {
-      console.log(error);
+    if (!id) {
+      try {
+        dispatch(
+          crearProyectoAction({
+            nombre,
+            descripcion,
+            fechaEntrega,
+            cliente,
+          })
+        );
+        setNombre('');
+        setDescripcion('');
+        setFechaEntrega('');
+        setCliente('');
+        setTimeout(() => {
+          dispatch(clearError());
+          navigate('/proyectos');
+        }, 3500);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        dispatch(
+          actualizarProyectoAction({
+            nombre,
+            descripcion,
+            fechaEntrega,
+            cliente,
+            _id: id,
+          })
+        );
+        setNombre('');
+        setDescripcion('');
+        setFechaEntrega('');
+        setCliente('');
+        setTimeout(() => {
+          dispatch(clearError());
+          navigate('/proyectos');
+        }, 3500);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -136,7 +186,7 @@ export default function FormularioProyecto() {
 
       <input
         type="submit"
-        value="Crear Proyecto"
+        value={id ? 'Editar Proyecto' : 'Crear Proyecto'}
         className="bg-sky-600 w-full text-white uppercase py-3 mb-5 font-bold rounded hover:cursor-pointer hover:bg-sky-800 transition-colors"
       />
     </form>

@@ -36,11 +36,11 @@ export default function Proyectos() {
             No hay proyectos
           </p>
         ) : (
-          <ul>
+          <>
             {proyectos.map((proyecto) => (
               <PreviewProyecto key={proyecto._id} proyecto={proyecto} />
             ))}
-          </ul>
+          </>
         )}
       </div>
     </>
