@@ -2,11 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import clienteAxios from '../config/clienteAxios';
 
 const initialState = {
-  id: '',
-  nombre: '',
-  email: '',
-  token: '',
-  error: '',
+  usuario: {},
+  alerta: {},
 };
 
 const loginSlice = createSlice({
@@ -14,21 +11,15 @@ const loginSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      state.id = action.payload._id;
-      state.nombre = action.payload.nombre;
-      state.email = action.payload.email;
-      state.token = action.payload.token;
+      state.usuario = action.payload;
     },
-    loginError: (state, action) => {
-      state.error = action.payload;
-    },
-    clearError: (state) => {
-      state.error = '';
+    loginAlerta: (state, action) => {
+      state.alerta = action.payload;
     },
   },
 });
 
-export const { login, loginError, clearError } = loginSlice.actions;
+export const { login, loginAlerta } = loginSlice.actions;
 
 export default loginSlice.reducer;
 
@@ -38,15 +29,22 @@ export const loginAction = (email, password) => async (dispatch) => {
       email,
       password,
     });
+
     dispatch(login(data));
     localStorage.setItem('token', data.token);
+    loginAlerta({ msg: 'Login exitoso' });
   } catch (error) {
     dispatch(
-      loginError(
-        error.response && error.response.data.msg
-          ? error.response.data.msg
-          : error.message
-      )
+      loginAlerta({
+        msg:
+          error.response && error.response.data.msg
+            ? error.response.data.msg
+            : error.message,
+        error: true,
+      })
     );
   }
+  setTimeout(() => {
+    dispatch(loginAlerta({}));
+  }, 3000);
 };

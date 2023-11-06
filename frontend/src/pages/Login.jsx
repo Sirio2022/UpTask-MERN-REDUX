@@ -4,19 +4,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Alerta from '../components/Alerta';
 import { loginAction } from '../redux/loginSlice';
-import { clearError } from '../redux/loginSlice';
 import { autenticarUsuario } from '../redux/perfilSlice';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [alerta, setAlerta] = useState({});
-  const [, setTimeOut] = useState(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { error } = useSelector((state) => state.login);
+  const { usuario, alerta: loginAlerta } = useSelector((state) => state.login);
 
   useEffect(() => {
     const autenticar = async () => {
@@ -26,14 +24,12 @@ export default function Login() {
         return;
       }
 
-      if (token) {
-        dispatch(autenticarUsuario());
-        navigate('/proyectos');
-      }
+      await dispatch(autenticarUsuario());
+      navigate('/proyectos');
     };
 
     autenticar();
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, usuario]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,33 +40,21 @@ export default function Login() {
         error: true,
         msg: 'Todos los campos son obligatorios',
       });
+      setTimeout(() => {
+        setAlerta({});
+      }, 3000);
       return;
     }
 
     try {
       dispatch(loginAction(email, password));
-
-      if (error) {
-        setAlerta({
-          error: true,
-          msg: error,
-        });
-
-        setTimeOut(() =>
-          setTimeout(() => {
-            setAlerta({});
-            dispatch(clearError());
-          }, 3000)
-        );
-
-        return;
-      }
     } catch (error) {
       console.log('error', error);
     }
   };
 
   const { msg } = alerta;
+  const { msg: loginMsg } = loginAlerta;
 
   return (
     <>
@@ -80,6 +64,7 @@ export default function Login() {
       </h1>
 
       {msg && <Alerta alerta={alerta} />}
+      {loginMsg && <Alerta alerta={loginAlerta} />}
 
       <form
         className="mt-10 bg-white shadow rounded-lg p-10"
