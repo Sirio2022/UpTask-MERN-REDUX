@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   obtenerProyectosAction,
   mostrarAlertaAction,
-  clearError,
+  
 } from '../redux/proyectosSlice';
 import PreviewProyecto from '../components/PreviewProyecto';
 import Alerta from '../components/Alerta';
@@ -18,7 +18,7 @@ export default function Proyectos() {
 
     if (error) {
       dispatch(mostrarAlertaAction({ error: true, msg: error }));
-      dispatch(clearError());
+      
     }
   }, [dispatch, error]);
 

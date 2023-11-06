@@ -6,7 +6,6 @@ const initialState = {
   proyecto: {},
   proyectoCreado: {},
   proyectoActualizado: {},
-  error: '',
   alerta: {},
 };
 
@@ -34,14 +33,9 @@ const proyectosSlice = createSlice({
       );
       state.proyectoActualizado = action.payload;
     },
-    proyectoError: (state, action) => {
-      state.error = action.payload;
-    },
+
     mostrarAlerta: (state, action) => {
       state.alerta = action.payload;
-    },
-    clearError: (state) => {
-      state.error = '';
     },
   },
 });
@@ -54,7 +48,6 @@ export const {
   actualizarProyecto,
   proyectoError,
   mostrarAlerta,
-  clearError,
 } = proyectosSlice.actions;
 
 export default proyectosSlice.reducer;
@@ -82,20 +75,20 @@ export const crearProyectoAction = (proyecto) => async (dispatch) => {
         error: false,
       })
     );
-    setTimeout(() => {
-      dispatch(mostrarAlerta({}));
-    }, 3000);
   } catch (error) {
     dispatch(
-      proyectoError(
-        error.response && error.response.data.msg
-          ? error.response.data.msg
-          : error.message
-      )
+      mostrarAlerta({
+        msg:
+          error.response && error.response.data.msg
+            ? error.response.data.msg
+            : error.message,
+        error: true,
+      })
     );
-  } finally {
-    dispatch(clearError());
   }
+  setTimeout(() => {
+    dispatch(mostrarAlerta({}));
+  }, 3000);
 };
 
 export const obtenerProyectosAction = () => async (dispatch) => {
@@ -110,15 +103,18 @@ export const obtenerProyectosAction = () => async (dispatch) => {
     dispatch(obtenerProyectos(data));
   } catch (error) {
     dispatch(
-      proyectoError(
-        error.response && error.response.data.msg
-          ? error.response.data.msg
-          : error.message
-      )
+      mostrarAlerta({
+        msg:
+          error.response && error.response.data.msg
+            ? error.response.data.msg
+            : error.message,
+        error: true,
+      })
     );
-  } finally {
-    dispatch(clearError());
   }
+  setTimeout(() => {
+    dispatch(mostrarAlerta({}));
+  }, 3000);
 };
 
 export const obtenerProyectoAction = (id) => async (dispatch) => {
@@ -134,15 +130,18 @@ export const obtenerProyectoAction = (id) => async (dispatch) => {
     dispatch(obtenerProyecto(data));
   } catch (error) {
     dispatch(
-      proyectoError(
-        error.response && error.response.data.msg
-          ? error.response.data.msg
-          : error.message
-      )
+      mostrarAlerta({
+        msg:
+          error.response && error.response.data.msg
+            ? error.response.data.msg
+            : error.message,
+        error: true,
+      })
     );
-  } finally {
-    dispatch(clearError());
   }
+  setTimeout(() => {
+    dispatch(mostrarAlerta({}));
+  }, 3000);
 };
 
 export const actualizarProyectoAction = (proyecto) => async (dispatch) => {
@@ -165,18 +164,18 @@ export const actualizarProyectoAction = (proyecto) => async (dispatch) => {
         error: false,
       })
     );
-    setTimeout(() => {
-      dispatch(mostrarAlerta({}));
-    }, 3000);
   } catch (error) {
     dispatch(
-      proyectoError(
-        error.response && error.response.data.msg
-          ? error.response.data.msg
-          : error.message
-      )
+      mostrarAlerta({
+        msg:
+          error.response && error.response.data.msg
+            ? error.response.data.msg
+            : error.message,
+        error: true,
+      })
     );
-  } finally {
-    dispatch(clearError());
   }
+  setTimeout(() => {
+    dispatch(mostrarAlerta({}));
+  }, 3000);
 };

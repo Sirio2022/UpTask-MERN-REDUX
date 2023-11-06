@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { mostrarAlertaAction } from '../redux/proyectosSlice';
 import {
   crearProyectoAction,
-  clearError,
   actualizarProyectoAction,
 } from '../redux/proyectosSlice';
 
@@ -20,7 +19,7 @@ export default function FormularioProyecto() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { alerta, error, proyecto } = useSelector((state) => state.proyectos);
+  const { alerta, proyecto } = useSelector((state) => state.proyectos);
   const {
     nombre: nombreProyecto,
     descripcion: descripcionProyecto,
@@ -57,15 +56,6 @@ export default function FormularioProyecto() {
       return;
     }
 
-    if (error) {
-      dispatch(
-        mostrarAlertaAction({
-          error: true,
-          msg: error,
-        })
-      );
-    }
-
     if (!id) {
       try {
         dispatch(
@@ -81,7 +71,6 @@ export default function FormularioProyecto() {
         setFechaEntrega('');
         setCliente('');
         setTimeout(() => {
-          dispatch(clearError());
           navigate('/proyectos');
         }, 3500);
       } catch (error) {
@@ -103,7 +92,6 @@ export default function FormularioProyecto() {
         setFechaEntrega('');
         setCliente('');
         setTimeout(() => {
-          dispatch(clearError());
           navigate('/proyectos');
         }, 3500);
       } catch (error) {
