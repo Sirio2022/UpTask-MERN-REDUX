@@ -7,6 +7,7 @@ const initialState = {
   proyectoCreado: {},
   proyectoActualizado: {},
   alerta: {},
+  modalFormularioTarea: false,
 };
 
 const proyectosSlice = createSlice({
@@ -33,9 +34,11 @@ const proyectosSlice = createSlice({
       );
       state.proyectoActualizado = action.payload;
     },
-
     mostrarAlerta: (state, action) => {
       state.alerta = action.payload;
+    },
+    mostrarModalFormularioTarea: (state, action) => {
+      state.modalFormularioTarea = action.payload;
     },
   },
 });
@@ -48,6 +51,7 @@ export const {
   actualizarProyecto,
   proyectoError,
   mostrarAlerta,
+  mostrarModalFormularioTarea,
 } = proyectosSlice.actions;
 
 export default proyectosSlice.reducer;
@@ -57,6 +61,10 @@ export const mostrarAlertaAction = (alerta) => (dispatch) => {
   setTimeout(() => {
     dispatch(mostrarAlerta({}));
   }, 5000);
+};
+
+export const mostrarModalFormularioTareaAction = () => (dispatch) => {
+  dispatch(mostrarModalFormularioTarea());
 };
 
 export const crearProyectoAction = (proyecto) => async (dispatch) => {
