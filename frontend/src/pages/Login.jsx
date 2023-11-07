@@ -3,18 +3,18 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Alerta from '../components/Alerta';
+import { mostrarAlertaAction } from '../redux/loginSlice';
 import { loginAction } from '../redux/loginSlice';
 import { autenticarUsuario } from '../redux/perfilSlice';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [alerta, setAlerta] = useState({});
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { usuario, alerta: loginAlerta } = useSelector((state) => state.login);
+  const { usuario, alerta } = useSelector((state) => state.login);
 
   useEffect(() => {
     const autenticar = async () => {
@@ -36,13 +36,11 @@ export default function Login() {
 
     // Validar
     if ([email, password].includes('')) {
-      setAlerta({
+      mostrarAlertaAction({
         error: true,
         msg: 'Todos los campos son obligatorios',
       });
-      setTimeout(() => {
-        setAlerta({});
-      }, 3000);
+
       return;
     }
 
@@ -54,7 +52,6 @@ export default function Login() {
   };
 
   const { msg } = alerta;
-  const { msg: loginMsg } = loginAlerta;
 
   return (
     <>
@@ -64,7 +61,6 @@ export default function Login() {
       </h1>
 
       {msg && <Alerta alerta={alerta} />}
-      {loginMsg && <Alerta alerta={loginAlerta} />}
 
       <form
         className="mt-10 bg-white shadow rounded-lg p-10"

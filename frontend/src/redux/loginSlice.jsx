@@ -23,6 +23,13 @@ export const { login, loginAlerta } = loginSlice.actions;
 
 export default loginSlice.reducer;
 
+export const mostrarAlertaAction = (alerta) => (dispatch) => {
+  dispatch(loginAlerta(alerta));
+  setTimeout(() => {
+    dispatch(loginAlerta({}));
+  }, 5000);
+};
+
 export const loginAction = (email, password) => async (dispatch) => {
   try {
     const { data } = await clienteAxios.post('/usuarios/login', {
