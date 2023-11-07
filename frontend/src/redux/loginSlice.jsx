@@ -32,7 +32,6 @@ export const loginAction = (email, password) => async (dispatch) => {
 
     dispatch(login(data));
     localStorage.setItem('token', data.token);
-    loginAlerta({ msg: 'Login exitoso' });
   } catch (error) {
     dispatch(
       loginAlerta({
