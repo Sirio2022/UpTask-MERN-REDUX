@@ -1,10 +1,16 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dialog, Transition } from '@headlessui/react';
 
 import { mostrarModalFormularioTarea } from '../redux/proyectosSlice';
 
+const PRIORIDAD = ['alta', 'media', 'baja'];
+
 const ModalFormularioTarea = () => {
+  const [nombre, setNombre] = useState('');
+  const [descripcion, setDescripcion] = useState('');
+  const [prioridad, setPrioridad] = useState('');
+
   const { modalFormularioTarea } = useSelector((state) => state.proyectos);
 
   const dispatch = useDispatch();
@@ -75,9 +81,71 @@ const ModalFormularioTarea = () => {
                     as="h3"
                     className="text-lg leading-6 font-bold text-gray-900"
                   >
-                    <h1 className="text-4xl">Título</h1>
+                    Crear Tarea
                   </Dialog.Title>
-                  <p>Contenido</p>
+                  <form className="my-10">
+                    <div className="mb-5">
+                      <label
+                        htmlFor="nombre"
+                        className="text-gray-700 uppercase font-bold"
+                      >
+                        Nombre Tarea
+                      </label>
+                      <input
+                        type="text"
+                        name="nombre"
+                        id="nombre"
+                        className="w-full border border-gray-400 rounded-lg px-3 py-2 mt-1 mb-5 text-sm text-gray-900"
+                        placeholder="Nombre Tarea"
+                        value={nombre}
+                        onChange={(e) => setNombre(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="mb-5">
+                      <label
+                        htmlFor="descripcion"
+                        className="text-gray-700 uppercase font-bold"
+                      >
+                        Descripción
+                      </label>
+                      <textarea
+                        name="descripcion"
+                        id="descripcion"
+                        className="w-full border border-gray-400 rounded-lg px-3 py-2 mt-1 mb-5 text-sm text-gray-900"
+                        placeholder="Descripción Tarea"
+                        value={descripcion}
+                        onChange={(e) => setDescripcion(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="mb-5">
+                      <label
+                        htmlFor="prioridad"
+                        className="text-gray-700 uppercase font-bold"
+                      >
+                        Prioridad
+                      </label>
+                      <select
+                        name="prioridad"
+                        id="prioridad"
+                        className="w-full border border-gray-400 rounded-lg px-3 py-2 mt-1 mb-5 text-sm text-gray-900"
+                        value={prioridad}
+                        onChange={(e) => setPrioridad(e.target.value)}
+                      >
+                        <option value="">-- Seleccione --</option>
+                        {PRIORIDAD.map((prioridad) => (
+                          <option key={prioridad}>{prioridad}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <input
+                      type="submit"
+                      className="bg-sky-600 w-full text-white uppercase py-3 mb-5 font-bold rounded hover:cursor-pointer hover:bg-sky-800 transition-colors"
+                      value="Crear Tarea"
+                    />
+                  </form>
                 </div>
               </div>
             </div>
