@@ -70,7 +70,7 @@ export const crearProyectoAction = (proyecto) => async (dispatch) => {
     const { data } = await clienteAxios.post('/proyectos', proyecto, config);
     dispatch(crearProyecto(data.proyecto));
     dispatch(
-      mostrarAlertaAction({
+      mostrarAlerta({
         msg: data.msg,
         error: false,
       })
@@ -159,7 +159,39 @@ export const actualizarProyectoAction = (proyecto) => async (dispatch) => {
     );
     dispatch(actualizarProyecto(data));
     dispatch(
-      mostrarAlertaAction({
+      mostrarAlerta({
+        msg: data.msg,
+        error: false,
+      })
+    );
+  } catch (error) {
+    dispatch(
+      mostrarAlerta({
+        msg:
+          error.response && error.response.data.msg
+            ? error.response.data.msg
+            : error.message,
+        error: true,
+      })
+    );
+  }
+  setTimeout(() => {
+    dispatch(mostrarAlerta({}));
+  }, 3000);
+};
+
+export const eliminarProyectoAction = (id) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  };
+  try {
+    const { data } = await clienteAxios.delete(`/proyectos/${id}`, config);
+    dispatch(eliminarProyecto(id));
+    dispatch(
+      mostrarAlerta({
         msg: data.msg,
         error: false,
       })

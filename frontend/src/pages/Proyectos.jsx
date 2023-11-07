@@ -1,26 +1,17 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  obtenerProyectosAction,
-  mostrarAlertaAction,
-  
-} from '../redux/proyectosSlice';
+import { obtenerProyectosAction } from '../redux/proyectosSlice';
 import PreviewProyecto from '../components/PreviewProyecto';
 import Alerta from '../components/Alerta';
 
 export default function Proyectos() {
-  const { proyectos, error, alerta } = useSelector((state) => state.proyectos);
+  const { proyectos, alerta } = useSelector((state) => state.proyectos);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(obtenerProyectosAction());
-
-    if (error) {
-      dispatch(mostrarAlertaAction({ error: true, msg: error }));
-      
-    }
-  }, [dispatch, error]);
+  }, [dispatch]);
 
   const { msg } = alerta;
 

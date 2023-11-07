@@ -9,7 +9,7 @@ export default function Proyecto() {
   const [loading, setLoading] = useState(false);
 
   const { proyecto, error } = useSelector((state) => state.proyectos);
-  const { nombre, descripcion, fechaEntrega, cliente } = proyecto;
+  const { nombre } = proyecto;
 
   const { id } = useParams();
   const dispatch = useDispatch();
