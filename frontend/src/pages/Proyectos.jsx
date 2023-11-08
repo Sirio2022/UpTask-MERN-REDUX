@@ -2,24 +2,22 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { obtenerProyectosAction } from '../redux/proyectosSlice';
 import PreviewProyecto from '../components/PreviewProyecto';
-import Alerta from '../components/Alerta';
 
 export default function Proyectos() {
-  const { proyectos, alerta } = useSelector((state) => state.proyectos);
+  const { proyectos } = useSelector((state) => state.proyectos);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(obtenerProyectosAction());
+    const obtenerProyectos = async () => {
+      await dispatch(obtenerProyectosAction());
+    };
+    obtenerProyectos();
   }, [dispatch]);
-
-  const { msg } = alerta;
 
   return (
     <>
       <h1 className="text-4xl font-black uppercase">Proyectos</h1>
-
-      {msg && <Alerta alerta={alerta} />}
 
       <div className="bg-white shadow mt-10 rounded-lg">
         {proyectos.length === 0 ? (

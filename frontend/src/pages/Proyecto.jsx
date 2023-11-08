@@ -3,15 +3,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { obtenerProyectoAction } from '../redux/proyectosSlice';
 import Spinner from '../components/Spinner';
-import Alerta from '../components/Alerta';
 
 import ModalFormularioTarea from '../components/ModalFormularioTarea';
 import { mostrarModalFormularioTarea } from '../redux/proyectosSlice';
+import Tarea from '../components/Tarea';
 
 export default function Proyecto() {
   const [loading, setLoading] = useState(false);
 
-  const { proyecto, alerta } = useSelector((state) => state.proyectos);
+  const { proyecto } = useSelector((state) => state.proyectos);
+
   const { nombre } = proyecto;
 
   const { id } = useParams();
@@ -24,9 +25,7 @@ export default function Proyecto() {
       setLoading(false);
     };
     obtenerProyecto();
-  }, [id, dispatch]);
-
-  const { msg } = alerta;
+  }, [id, dispatch, proyecto.tareas]);
 
   return (
     <div>
@@ -35,7 +34,6 @@ export default function Proyecto() {
       ) : (
         <>
           <div className="flex justify-between">
-            {msg && <Alerta alerta={alerta} />}
             <h1 className="font-black uppercase text-4xl">{nombre}</h1>
 
             <div className="flex items-center gap-2 text-gray-400 hover:text-black">
@@ -83,6 +81,18 @@ export default function Proyecto() {
             </svg>
             Nueva Tarea
           </button>
+
+          <p className="font-bold text-xl mt-10">Tareas del Proyecto</p>
+
+          <div className="bg-white shadow-xl mt-10 rounded-lg">
+            {proyecto.tareas?.length === 0 ? (
+              <p className="text-center text-gray-400 py-5">No hay tareas</p>
+            ) : (
+              proyecto.tareas?.map((tarea) => (
+                <Tarea key={tarea._id} tarea={tarea} />
+              ))
+            )}
+          </div>
 
           <ModalFormularioTarea />
         </>

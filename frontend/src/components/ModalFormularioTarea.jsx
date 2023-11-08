@@ -55,6 +55,9 @@ const ModalFormularioTarea = () => {
     setDescripcion('');
     setFechaEntrega('');
     setPrioridad('');
+    setTimeout(() => {
+      dispatch(mostrarModalFormularioTarea(false));
+    }, 3000);
   };
 
   const { msg } = alerta;

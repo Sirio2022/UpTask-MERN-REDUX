@@ -19,6 +19,10 @@ const agregarTarea = async (req, res) => {
 
     const tarea = await Tarea.create(req.body);
 
+    // Agregar tarea al proyecto
+    proyectoExiste.tareas.push(tarea._id);
+    await proyectoExiste.save();
+
     res.json({
       msg: 'Tarea agregada correctamente',
       tarea,

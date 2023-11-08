@@ -18,6 +18,7 @@ const tareasSlice = createSlice({
     },
     crearTarea: (state, action) => {
       state.tareaCreada = action.payload;
+      state.tareas = [...state.tareas, action.payload];
     },
     obtenerTarea: (state, action) => {
       state.tarea = action.payload;
