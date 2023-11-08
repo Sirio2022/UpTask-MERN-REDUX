@@ -19,7 +19,10 @@ const agregarTarea = async (req, res) => {
 
     const tarea = await Tarea.create(req.body);
 
-    res.json(tarea);
+    res.json({
+      msg: 'Tarea agregada correctamente',
+      tarea,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: 'Hubo un error' });

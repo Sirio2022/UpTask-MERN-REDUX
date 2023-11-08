@@ -10,7 +10,6 @@ import { mostrarModalFormularioTarea } from '../redux/proyectosSlice';
 
 export default function Proyecto() {
   const [loading, setLoading] = useState(false);
-  const [modal, setModal] = useState(false);
 
   const { proyecto, alerta } = useSelector((state) => state.proyectos);
   const { nombre } = proyecto;
@@ -85,7 +84,7 @@ export default function Proyecto() {
             Nueva Tarea
           </button>
 
-          <ModalFormularioTarea modal={modal} setModal={setModal} />
+          <ModalFormularioTarea />
         </>
       )}
     </div>

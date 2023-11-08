@@ -2,18 +2,63 @@ import { Fragment, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dialog, Transition } from '@headlessui/react';
 
-import { mostrarModalFormularioTarea } from '../redux/proyectosSlice';
+import {
+  mostrarModalFormularioTarea,
+  mostrarAlertaAction,
+} from '../redux/proyectosSlice';
+
+import { crearTareaAction } from '../redux/tareasSlice';
+
+import Alerta from './Alerta';
 
 const PRIORIDAD = ['alta', 'media', 'baja'];
 
 const ModalFormularioTarea = () => {
   const [nombre, setNombre] = useState('');
   const [descripcion, setDescripcion] = useState('');
+  const [fechaEntrega, setFechaEntrega] = useState('');
   const [prioridad, setPrioridad] = useState('');
 
-  const { modalFormularioTarea } = useSelector((state) => state.proyectos);
+  const { modalFormularioTarea, alerta, proyecto } = useSelector(
+    (state) => state.proyectos
+  );
+
+  const { _id, nombre: nombreProyecto } = proyecto;
+
+  const { alertaTarea } = useSelector((state) => state.tareas);
 
   const dispatch = useDispatch();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if ([nombre, descripcion, fechaEntrega, prioridad].includes('')) {
+      dispatch(
+        mostrarAlertaAction({
+          msg: 'Todos los campos son obligatorios',
+          error: true,
+        })
+      );
+      return;
+    }
+
+    dispatch(
+      crearTareaAction({
+        nombre,
+        descripcion,
+        fechaEntrega,
+        prioridad,
+        proyecto: _id,
+      })
+    );
+    setNombre('');
+    setDescripcion('');
+    setFechaEntrega('');
+    setPrioridad('');
+  };
+
+  const { msg } = alerta;
+  const { msg: msgTarea } = alertaTarea;
 
   return (
     <Transition.Root show={modalFormularioTarea} as={Fragment}>
@@ -81,9 +126,11 @@ const ModalFormularioTarea = () => {
                     as="h3"
                     className="text-lg leading-6 font-bold text-gray-900"
                   >
-                    Crear Tarea
+                    Crear Tarea en: {`${nombreProyecto}`}
                   </Dialog.Title>
-                  <form className="my-10">
+                  {msg && <Alerta alerta={alerta} />}
+                  {msgTarea && <Alerta alerta={alertaTarea} />}
+                  <form className="my-10" onSubmit={handleSubmit}>
                     <div className="mb-5">
                       <label
                         htmlFor="nombre"
@@ -116,6 +163,23 @@ const ModalFormularioTarea = () => {
                         placeholder="Descripción Tarea"
                         value={descripcion}
                         onChange={(e) => setDescripcion(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="mb-5">
+                      <label
+                        htmlFor="fecha-entrega"
+                        className="text-gray-700 uppercase font-bold"
+                      >
+                        Fecha de Entrega
+                      </label>
+                      <input
+                        type="date"
+                        name="fecha-entrega"
+                        id="fecha-entrega"
+                        className="w-full border border-gray-400 rounded-lg px-3 py-2 mt-1 mb-5 text-sm text-gray-900"
+                        value={fechaEntrega}
+                        onChange={(e) => setFechaEntrega(e.target.value)}
                       />
                     </div>
 

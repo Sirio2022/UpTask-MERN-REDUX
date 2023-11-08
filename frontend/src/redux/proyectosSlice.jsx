@@ -78,14 +78,14 @@ export const crearProyectoAction = (proyecto) => async (dispatch) => {
     const { data } = await clienteAxios.post('/proyectos', proyecto, config);
     dispatch(crearProyecto(data.proyecto));
     dispatch(
-      mostrarAlerta({
+      mostrarAlertaAction({
         msg: data.msg,
         error: false,
       })
     );
   } catch (error) {
     dispatch(
-      mostrarAlerta({
+      mostrarAlertaAction({
         msg:
           error.response && error.response.data.msg
             ? error.response.data.msg
@@ -94,9 +94,6 @@ export const crearProyectoAction = (proyecto) => async (dispatch) => {
       })
     );
   }
-  setTimeout(() => {
-    dispatch(mostrarAlerta({}));
-  }, 3000);
 };
 
 export const obtenerProyectosAction = () => async (dispatch) => {
@@ -111,7 +108,7 @@ export const obtenerProyectosAction = () => async (dispatch) => {
     dispatch(obtenerProyectos(data));
   } catch (error) {
     dispatch(
-      mostrarAlerta({
+      mostrarAlertaAction({
         msg:
           error.response && error.response.data.msg
             ? error.response.data.msg
@@ -120,9 +117,6 @@ export const obtenerProyectosAction = () => async (dispatch) => {
       })
     );
   }
-  setTimeout(() => {
-    dispatch(mostrarAlerta({}));
-  }, 3000);
 };
 
 export const obtenerProyectoAction = (id) => async (dispatch) => {
@@ -138,7 +132,7 @@ export const obtenerProyectoAction = (id) => async (dispatch) => {
     dispatch(obtenerProyecto(data));
   } catch (error) {
     dispatch(
-      mostrarAlerta({
+      mostrarAlertaAction({
         msg:
           error.response && error.response.data.msg
             ? error.response.data.msg
@@ -147,9 +141,6 @@ export const obtenerProyectoAction = (id) => async (dispatch) => {
       })
     );
   }
-  setTimeout(() => {
-    dispatch(mostrarAlerta({}));
-  }, 3000);
 };
 
 export const actualizarProyectoAction = (proyecto) => async (dispatch) => {
@@ -167,14 +158,14 @@ export const actualizarProyectoAction = (proyecto) => async (dispatch) => {
     );
     dispatch(actualizarProyecto(data));
     dispatch(
-      mostrarAlerta({
+      mostrarAlertaAction({
         msg: data.msg,
         error: false,
       })
     );
   } catch (error) {
     dispatch(
-      mostrarAlerta({
+      mostrarAlertaAction({
         msg:
           error.response && error.response.data.msg
             ? error.response.data.msg
@@ -183,9 +174,6 @@ export const actualizarProyectoAction = (proyecto) => async (dispatch) => {
       })
     );
   }
-  setTimeout(() => {
-    dispatch(mostrarAlerta({}));
-  }, 3000);
 };
 
 export const eliminarProyectoAction = (id) => async (dispatch) => {
@@ -199,14 +187,14 @@ export const eliminarProyectoAction = (id) => async (dispatch) => {
     const { data } = await clienteAxios.delete(`/proyectos/${id}`, config);
     dispatch(eliminarProyecto(id));
     dispatch(
-      mostrarAlerta({
+      mostrarAlertaAction({
         msg: data.msg,
         error: false,
       })
     );
   } catch (error) {
     dispatch(
-      mostrarAlerta({
+      mostrarAlertaAction({
         msg:
           error.response && error.response.data.msg
             ? error.response.data.msg
@@ -215,7 +203,4 @@ export const eliminarProyectoAction = (id) => async (dispatch) => {
       })
     );
   }
-  setTimeout(() => {
-    dispatch(mostrarAlerta({}));
-  }, 3000);
 };
