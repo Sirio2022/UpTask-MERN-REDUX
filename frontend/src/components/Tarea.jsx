@@ -26,7 +26,7 @@ export default function Tarea({ tarea }) {
     }).then((result) => {
       if (result.isConfirmed) {
         dispatch(eliminarTareaAction(tarea._id));
-        Swal.fire('Eliminada', 'La tarea ha sido eliminada', 'success');
+        Swal.fire('Eliminada', 'La tarea ha sido eliminada correctamente!', 'success');
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire('Cancelado', 'La tarea no se ha eliminado', 'error');
       }
