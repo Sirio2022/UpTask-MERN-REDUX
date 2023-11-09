@@ -1,14 +1,37 @@
 import PropTypes from 'prop-types';
 
 import { useDispatch } from 'react-redux';
-import { handleModalEditarTareaAction } from '../redux/proyectosSlice';
+import {
+  handleModalEditarTareaAction,
+  eliminarTareaAction,
+} from '../redux/proyectosSlice';
 
 import { formatearFecha } from '../helpers/formatearFecha';
+
+import Swal from 'sweetalert2';
 
 export default function Tarea({ tarea }) {
   const { nombre, descripcion, prioridad, fechaEntrega, estado } = tarea;
 
   const dispatch = useDispatch();
+
+  const handleClick = () => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Una vez eliminada, no se podrá recuperar la tarea',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(eliminarTareaAction(tarea._id));
+        Swal.fire('Eliminada', 'La tarea ha sido eliminada', 'success');
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire('Cancelado', 'La tarea no se ha eliminado', 'error');
+      }
+    });
+  };
 
   return (
     <div
@@ -59,6 +82,7 @@ export default function Tarea({ tarea }) {
         <button
           type="button"
           className="bg-indigo-600 text-white font-bold text-sm px-4 py-3 rounded-lg uppercase"
+          onClick={handleClick}
         >
           Eliminar
         </button>

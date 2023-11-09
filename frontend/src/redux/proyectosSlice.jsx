@@ -56,6 +56,14 @@ const proyectosSlice = createSlice({
         ),
       };
     },
+    eliminarTarea: (state, action) => {
+      state.proyecto = {
+        ...state.proyecto,
+        tareas: state.proyecto.tareas.filter(
+          (tarea) => tarea._id !== action.payload
+        ),
+      };
+    },
   },
 });
 
@@ -70,6 +78,7 @@ export const {
   crearTarea,
   editarTarea,
   actualizarTarea,
+  eliminarTarea,
 } = proyectosSlice.actions;
 
 export default proyectosSlice.reducer;
@@ -78,7 +87,7 @@ export const mostrarAlertaAction = (alerta) => (dispatch) => {
   dispatch(mostrarAlerta(alerta));
   setTimeout(() => {
     dispatch(mostrarAlerta({}));
-  }, 5000);
+  }, 2000);
 };
 
 export const mostrarModalFormularioTareaAction = () => (dispatch) => {
@@ -288,6 +297,36 @@ export const crearTareaAction = (tarea) => async (dispatch) => {
         })
       );
     }
+  }
+};
+
+export const eliminarTareaAction = (id) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  };
+  try {
+    const { data } = await clienteAxios.delete(`/tareas/${id}`, config);
+    dispatch(eliminarTarea(id));
+    dispatch(
+      mostrarAlertaAction({
+        msg: data.msg,
+        error: false,
+      })
+    );
+  } catch (error) {
+    console.log(error);
+    dispatch(
+      mostrarAlertaAction({
+        msg:
+          error.response && error.response.data.msg
+            ? error.response.data.msg
+            : error.message,
+        error: true,
+      })
+    );
   }
 };
 
