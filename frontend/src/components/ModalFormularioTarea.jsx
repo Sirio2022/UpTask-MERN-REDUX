@@ -52,6 +52,7 @@ const ModalFormularioTarea = () => {
 
     dispatch(
       crearTareaAction({
+        id,
         nombre,
         descripcion,
         fechaEntrega,
@@ -59,6 +60,7 @@ const ModalFormularioTarea = () => {
         proyecto: _id,
       })
     );
+    setId('');
     setNombre('');
     setDescripcion('');
     setFechaEntrega('');

@@ -77,7 +77,10 @@ const actualizarTarea = async (req, res) => {
       req.body,
       { new: true }
     );
-    res.json(actualizarTarea);
+    res.json({
+      msg: 'Tarea actualizada correctamente',
+      tarea: actualizarTarea,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: 'Hubo un error' });

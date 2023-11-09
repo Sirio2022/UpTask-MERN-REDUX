@@ -48,6 +48,14 @@ const proyectosSlice = createSlice({
     editarTarea: (state, action) => {
       state.tarea = action.payload;
     },
+    actualizarTarea: (state, action) => {
+      state.proyecto = {
+        ...state.proyecto,
+        tareas: state.proyecto.tareas.map((tarea) =>
+          tarea._id === action.payload._id ? action.payload : tarea
+        ),
+      };
+    },
   },
 });
 
@@ -61,6 +69,7 @@ export const {
   mostrarModalFormularioTarea,
   crearTarea,
   editarTarea,
+  actualizarTarea,
 } = proyectosSlice.actions;
 
 export default proyectosSlice.reducer;
@@ -216,34 +225,69 @@ export const eliminarProyectoAction = (id) => async (dispatch) => {
 };
 
 export const crearTareaAction = (tarea) => async (dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-  };
+  if (tarea?.id) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    };
 
-  try {
-    const { data } = await clienteAxios.post('/tareas', tarea, config);
+    try {
+      const { data } = await clienteAxios.put(
+        `/tareas/${tarea.id}`,
+        tarea,
+        config
+      );
+      dispatch(actualizarTarea(data.tarea));
 
-    dispatch(crearTarea(data.tarea));
-    dispatch(
-      mostrarAlertaAction({
-        msg: data.msg,
-        error: false,
-      })
-    );
-  } catch (error) {
-    console.log(error);
-    dispatch(
-      mostrarAlertaAction({
-        msg:
-          error.response && error.response.data.msg
-            ? error.response.data.msg
-            : error.message,
-        error: true,
-      })
-    );
+      dispatch(
+        mostrarAlertaAction({
+          msg: data.msg,
+          error: false,
+        })
+      );
+    } catch (error) {
+      console.log(error);
+      dispatch(
+        mostrarAlertaAction({
+          msg:
+            error.response && error.response.data.msg
+              ? error.response.data.msg
+              : error.message,
+          error: true,
+        })
+      );
+    }
+  } else {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      };
+      const { data } = await clienteAxios.post('/tareas', tarea, config);
+
+      dispatch(crearTarea(data.tarea));
+      dispatch(
+        mostrarAlertaAction({
+          msg: data.msg,
+          error: false,
+        })
+      );
+    } catch (error) {
+      console.log(error);
+      dispatch(
+        mostrarAlertaAction({
+          msg:
+            error.response && error.response.data.msg
+              ? error.response.data.msg
+              : error.message,
+          error: true,
+        })
+      );
+    }
   }
 };
 
