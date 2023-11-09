@@ -5,7 +5,7 @@ import { obtenerProyectoAction } from '../redux/proyectosSlice';
 import Spinner from '../components/Spinner';
 
 import ModalFormularioTarea from '../components/ModalFormularioTarea';
-import { mostrarModalFormularioTarea } from '../redux/proyectosSlice';
+import { mostrarModalFormularioTareaAction } from '../redux/proyectosSlice';
 import Tarea from '../components/Tarea';
 
 export default function Proyecto() {
@@ -62,7 +62,7 @@ export default function Proyecto() {
             </div>
           </div>
           <button
-            onClick={() => dispatch(mostrarModalFormularioTarea(true))}
+            onClick={() => dispatch(mostrarModalFormularioTareaAction())}
             type="button"
             className="text-sm px-5 py-3 w-full md:w-auto rounded-lg uppercase font-bold bg-sky-400 text-white text-center mt-5 flex gap-2 items-center justify-center"
           >

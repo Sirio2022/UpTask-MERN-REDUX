@@ -73,7 +73,8 @@ export const mostrarAlertaAction = (alerta) => (dispatch) => {
 };
 
 export const mostrarModalFormularioTareaAction = () => (dispatch) => {
-  dispatch(mostrarModalFormularioTarea());
+  dispatch(mostrarModalFormularioTarea(true));
+  dispatch(editarTarea({}));
 };
 
 export const crearProyectoAction = (proyecto) => async (dispatch) => {

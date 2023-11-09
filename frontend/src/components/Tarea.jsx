@@ -16,9 +16,14 @@ export default function Tarea({ tarea }) {
       className="border-b p-5 flex justify-between items-center"
     >
       <div>
-        <p className="text-xl">{nombre}</p>
-        <p className="text-sm text-gray-500 uppercase">{descripcion}</p>
-        <p className="text-xl">{formatearFecha(fechaEntrega)}</p>
+        <p className="text-xl uppercase">Tarea: {nombre}</p>
+        <p className="text-sm text-gray-500 uppercase">
+          Descripción: {descripcion}
+        </p>
+        <p className="text-sm">
+          <span className="font-bold uppercase">Fecha de entrega:</span>{' '}
+          {formatearFecha(fechaEntrega)}
+        </p>
         <p className="text-gray-600">
           {' '}
           <span className="uppercase font-bold text-gray-600">

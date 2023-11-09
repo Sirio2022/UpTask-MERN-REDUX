@@ -13,6 +13,7 @@ import Alerta from './Alerta';
 const PRIORIDAD = ['alta', 'media', 'baja'];
 
 const ModalFormularioTarea = () => {
+  const [id, setId] = useState('');
   const [nombre, setNombre] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [fechaEntrega, setFechaEntrega] = useState('');
@@ -22,15 +23,18 @@ const ModalFormularioTarea = () => {
     (state) => state.proyectos
   );
 
-  const { _id, nombre: nombreProyecto } = proyecto;
+  const { _id } = proyecto;
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    setId(tarea._id);
     setNombre(tarea.nombre);
     setDescripcion(tarea.descripcion);
-    setFechaEntrega(tarea.fechaEntrega);
+    setFechaEntrega(tarea.fechaEntrega?.split('T')[0]);
     setPrioridad(tarea.prioridad);
+
+    return;
   }, [tarea]);
 
   const handleSubmit = (e) => {
@@ -133,7 +137,7 @@ const ModalFormularioTarea = () => {
                     as="h3"
                     className="text-lg leading-6 font-bold text-gray-900"
                   >
-                    Crear Tarea en: {`${nombreProyecto}`}
+                    {id ? 'Editar Tarea' : 'Crear Terea'}
                   </Dialog.Title>
                   {msg && <Alerta alerta={alerta} />}
 
@@ -214,7 +218,7 @@ const ModalFormularioTarea = () => {
                     <input
                       type="submit"
                       className="bg-sky-600 w-full text-white uppercase py-3 mb-5 font-bold rounded hover:cursor-pointer hover:bg-sky-800 transition-colors"
-                      value="Crear Tarea"
+                      value={id ? 'Guardar Cambios' : 'Crear Tarea'}
                     />
                   </form>
                 </div>
