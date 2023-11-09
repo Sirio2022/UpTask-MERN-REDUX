@@ -12,6 +12,9 @@ export default function Proyecto() {
   const [loading, setLoading] = useState(false);
 
   const { proyecto } = useSelector((state) => state.proyectos);
+  const { tareas } = proyecto;
+  console.log(tareas);
+
 
   const { nombre } = proyecto;
 
@@ -22,10 +25,11 @@ export default function Proyecto() {
     const obtenerProyecto = async () => {
       setLoading(true);
       await dispatch(obtenerProyectoAction(id));
+
       setLoading(false);
     };
     obtenerProyecto();
-  }, [id, dispatch, proyecto.tareas]);
+  }, [id, dispatch]);
 
   return (
     <div>

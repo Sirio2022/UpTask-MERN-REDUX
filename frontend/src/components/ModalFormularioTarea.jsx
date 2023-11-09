@@ -5,9 +5,8 @@ import { Dialog, Transition } from '@headlessui/react';
 import {
   mostrarModalFormularioTarea,
   mostrarAlertaAction,
+  crearTareaAction,
 } from '../redux/proyectosSlice';
-
-import { crearTareaAction } from '../redux/tareasSlice';
 
 import Alerta from './Alerta';
 
@@ -24,8 +23,6 @@ const ModalFormularioTarea = () => {
   );
 
   const { _id, nombre: nombreProyecto } = proyecto;
-
-  const { alertaTarea } = useSelector((state) => state.tareas);
 
   const dispatch = useDispatch();
 
@@ -61,7 +58,6 @@ const ModalFormularioTarea = () => {
   };
 
   const { msg } = alerta;
-  const { msg: msgTarea } = alertaTarea;
 
   return (
     <Transition.Root show={modalFormularioTarea} as={Fragment}>
@@ -132,7 +128,7 @@ const ModalFormularioTarea = () => {
                     Crear Tarea en: {`${nombreProyecto}`}
                   </Dialog.Title>
                   {msg && <Alerta alerta={alerta} />}
-                  {msgTarea && <Alerta alerta={alertaTarea} />}
+
                   <form className="my-10" onSubmit={handleSubmit}>
                     <div className="mb-5">
                       <label

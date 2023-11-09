@@ -4,8 +4,6 @@ import clienteAxios from '../config/clienteAxios';
 const initialState = {
   proyectos: [],
   proyecto: {},
-  proyectoCreado: {},
-  proyectoActualizado: {},
   alerta: {},
   modalFormularioTarea: false,
 };
@@ -18,8 +16,9 @@ const proyectosSlice = createSlice({
       state.proyectos = action.payload;
     },
     crearProyecto: (state, action) => {
-      state.proyectoCreado = action.payload;
+      state.proyectos = [...state.proyectos, action.payload];
     },
+
     obtenerProyecto: (state, action) => {
       state.proyecto = action.payload;
     },
@@ -32,13 +31,18 @@ const proyectosSlice = createSlice({
       state.proyectos = state.proyectos.map((proyecto) =>
         proyecto._id === action.payload._id ? action.payload : proyecto
       );
-      state.proyectoActualizado = action.payload;
     },
     mostrarAlerta: (state, action) => {
       state.alerta = action.payload;
     },
     mostrarModalFormularioTarea: (state, action) => {
       state.modalFormularioTarea = action.payload;
+    },
+    crearTarea: (state, action) => {
+      state.proyecto = {
+        ...state.proyecto,
+        tareas: [...state.proyecto.tareas, action.payload],
+      };
     },
   },
 });
@@ -49,9 +53,10 @@ export const {
   crearProyecto,
   eliminarProyecto,
   actualizarProyecto,
-  proyectoError,
+
   mostrarAlerta,
   mostrarModalFormularioTarea,
+  crearTarea,
 } = proyectosSlice.actions;
 
 export default proyectosSlice.reducer;
@@ -193,6 +198,38 @@ export const eliminarProyectoAction = (id) => async (dispatch) => {
       })
     );
   } catch (error) {
+    dispatch(
+      mostrarAlertaAction({
+        msg:
+          error.response && error.response.data.msg
+            ? error.response.data.msg
+            : error.message,
+        error: true,
+      })
+    );
+  }
+};
+
+export const crearTareaAction = (tarea) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  };
+
+  try {
+    const { data } = await clienteAxios.post('/tareas', tarea, config);
+
+    dispatch(crearTarea(data.tarea));
+    dispatch(
+      mostrarAlertaAction({
+        msg: data.msg,
+        error: false,
+      })
+    );
+  } catch (error) {
+    console.log(error);
     dispatch(
       mostrarAlertaAction({
         msg:
