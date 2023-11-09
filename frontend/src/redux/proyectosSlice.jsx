@@ -53,7 +53,6 @@ export const {
   crearProyecto,
   eliminarProyecto,
   actualizarProyecto,
-
   mostrarAlerta,
   mostrarModalFormularioTarea,
   crearTarea,
