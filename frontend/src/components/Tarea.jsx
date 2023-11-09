@@ -1,9 +1,14 @@
 import PropTypes from 'prop-types';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { handleModalEditarTareaAction } from '../redux/proyectosSlice';
+
 import { formatearFecha } from '../helpers/formatearFecha';
 
 export default function Tarea({ tarea }) {
   const { nombre, descripcion, prioridad, fechaEntrega, _id, estado } = tarea;
+
+  const dispatch = useDispatch();
 
   return (
     <div
@@ -27,6 +32,7 @@ export default function Tarea({ tarea }) {
         <button
           type="button"
           className="bg-red-600 text-white font-bold text-sm px-4 py-3 rounded-lg uppercase"
+          onClick={() => dispatch(handleModalEditarTareaAction(tarea))}
         >
           Editar
         </button>

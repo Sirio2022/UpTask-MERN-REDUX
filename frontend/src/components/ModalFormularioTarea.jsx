@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dialog, Transition } from '@headlessui/react';
 
@@ -18,13 +18,20 @@ const ModalFormularioTarea = () => {
   const [fechaEntrega, setFechaEntrega] = useState('');
   const [prioridad, setPrioridad] = useState('');
 
-  const { modalFormularioTarea, alerta, proyecto } = useSelector(
+  const { modalFormularioTarea, alerta, proyecto, tarea } = useSelector(
     (state) => state.proyectos
   );
 
   const { _id, nombre: nombreProyecto } = proyecto;
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setNombre(tarea.nombre);
+    setDescripcion(tarea.descripcion);
+    setFechaEntrega(tarea.fechaEntrega);
+    setPrioridad(tarea.prioridad);
+  }, [tarea]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -79,6 +86,7 @@ const ModalFormularioTarea = () => {
             <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
 
+          {/* This element is to trick the browser into centering the modal contents. */}
           {/* This element is to trick the browser into centering the modal contents. */}
           <span
             className="hidden sm:inline-block sm:align-middle sm:h-screen"

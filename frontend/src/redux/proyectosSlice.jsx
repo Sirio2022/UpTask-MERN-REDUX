@@ -4,6 +4,7 @@ import clienteAxios from '../config/clienteAxios';
 const initialState = {
   proyectos: [],
   proyecto: {},
+  tarea: {},
   alerta: {},
   modalFormularioTarea: false,
 };
@@ -44,6 +45,9 @@ const proyectosSlice = createSlice({
         tareas: [...state.proyecto.tareas, action.payload],
       };
     },
+    editarTarea: (state, action) => {
+      state.tarea = action.payload;
+    },
   },
 });
 
@@ -56,6 +60,7 @@ export const {
   mostrarAlerta,
   mostrarModalFormularioTarea,
   crearTarea,
+  editarTarea,
 } = proyectosSlice.actions;
 
 export default proyectosSlice.reducer;
@@ -239,4 +244,9 @@ export const crearTareaAction = (tarea) => async (dispatch) => {
       })
     );
   }
+};
+
+export const handleModalEditarTareaAction = (tarea) => (dispatch) => {
+  dispatch(editarTarea(tarea));
+  dispatch(mostrarModalFormularioTarea(true));
 };
