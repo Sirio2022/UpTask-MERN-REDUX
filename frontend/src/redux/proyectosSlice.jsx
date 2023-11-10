@@ -30,13 +30,9 @@ const proyectosSlice = createSlice({
       );
     },
     actualizarProyecto: (state, action) => {
-      state.proyectos = {
-        ...state.proyectos,
-        proyectos: state.proyectos.map((proyecto) =>
-          proyecto._id === action.payload._id ? action.payload : proyecto
-        ),
-      };
-
+      state.proyectos = state.proyectos.map((proyecto) =>
+        proyecto._id === action.payload ? action.payload : proyecto
+      );
       state.colaborador = {};
     },
 
@@ -204,7 +200,7 @@ export const actualizarProyectoAction = (proyecto) => async (dispatch) => {
       proyecto,
       config
     );
-    console.log(data);
+    
     dispatch(actualizarProyecto(data.proyectoActualizado));
     dispatch(
       mostrarAlertaAction({
@@ -407,7 +403,7 @@ export const agregarColaboradorAction =
         { email },
         config
       );
-
+     
       dispatch(actualizarProyecto(data.proyecto));
       dispatch(
         mostrarAlertaAction({
