@@ -3,7 +3,7 @@ import Spinner from './Spinner';
 
 import {
   mostrarAlertaAction,
-  agregarColaboradorAction,
+  buscarColaboradorAction,
 } from '../redux/proyectosSlice';
 import Alerta from './Alerta';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,7 +30,8 @@ export default function FormularioColaborador() {
       return;
     }
     setLoading(true);
-    await dispatch(agregarColaboradorAction(email));
+    await dispatch(buscarColaboradorAction(email));
+    setEmail('');
     setLoading(false);
   };
 

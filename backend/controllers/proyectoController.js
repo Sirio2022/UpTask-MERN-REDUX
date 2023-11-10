@@ -107,7 +107,52 @@ const buscarColaborador = async (req, res) => {
   res.status(200).json(usuario);
 };
 
-const agregarColaborador = async (req, res) => {};
+const agregarColaborador = async (req, res) => {
+  const proyecto = await Proyecto.findById(req.params.id);
+
+  if (!proyecto) {
+    const error = new Error('Proyecto no encontrado');
+    res.status(404).json({ msg: error.message });
+    return;
+  } else if (proyecto.creador.toString() !== req.usuario._id.toString()) {
+    const error = new Error(
+      'No autorizado para agregar colaboradores a este proyecto'
+    );
+    res.status(401).json({ msg: error.message });
+    return;
+  }
+
+  const { email } = req.body;
+
+  const usuario = await Usuario.findOne({ email }).select(
+    '-password -__v -confirmado -createdAt -token -updatedAt'
+  );
+
+  if (!usuario) {
+    const error = new Error('Usuario no encontrado');
+    res.status(404).json({ msg: error.message });
+    return;
+  }
+
+  // El colaborador no es el creador del proyecto
+  if (proyecto.creador.toString() === usuario._id.toString()) {
+    const error = new Error(
+      'El colaborador no puede ser el creador del proyecto'
+    );
+    res.status(400).json({ msg: error.message });
+    return;
+  }
+
+  // El colaborador ya está agregado al proyecto
+  if (proyecto.colaboradores.includes(usuario._id.toString())) {
+    const error = new Error('El colaborador ya está agregado al proyecto');
+    res.status(400).json({ msg: error.message });
+    return;
+  }
+  proyecto.colaboradores.push(usuario._id);
+  await proyecto.save();
+  res.status(200).json({ msg: 'Colaborador agregado correctamente' });
+};
 
 const eliminarColaborador = async (req, res) => {};
 

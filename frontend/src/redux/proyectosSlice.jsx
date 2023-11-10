@@ -33,6 +33,7 @@ const proyectosSlice = createSlice({
       state.proyectos = state.proyectos.map((proyecto) =>
         proyecto._id === action.payload._id ? action.payload : proyecto
       );
+      state.colaborador = {};
     },
     mostrarAlerta: (state, action) => {
       state.alerta = action.payload;
@@ -65,7 +66,7 @@ const proyectosSlice = createSlice({
         ),
       };
     },
-    agregarColaborador: (state, action) => {
+    findColaborador: (state, action) => {
       state.colaborador = action.payload;
     },
   },
@@ -83,7 +84,7 @@ export const {
   editarTarea,
   actualizarTarea,
   eliminarTarea,
-  agregarColaborador,
+  findColaborador,
 } = proyectosSlice.actions;
 
 export default proyectosSlice.reducer;
@@ -340,7 +341,7 @@ export const handleModalEditarTareaAction = (tarea) => (dispatch) => {
   dispatch(mostrarModalFormularioTarea(true));
 };
 
-export const agregarColaboradorAction = (email) => async (dispatch) => {
+export const buscarColaboradorAction = (email) => async (dispatch) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -353,7 +354,7 @@ export const agregarColaboradorAction = (email) => async (dispatch) => {
       { email },
       config
     );
-    dispatch(agregarColaborador(data));
+    dispatch(findColaborador(data));
     dispatch(
       mostrarAlertaAction({
         msg: data.msg,
@@ -371,5 +372,43 @@ export const agregarColaboradorAction = (email) => async (dispatch) => {
         error: true,
       })
     );
+    dispatch(findColaborador({}));
   }
 };
+
+export const agregarColaboradorAction =
+  (email) => async (dispatch, getState) => {
+    const { _id } = getState().proyectos.proyecto;
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      };
+      const { data } = await clienteAxios.post(
+        `/proyectos/colaboradores/${_id}`,
+        { email },
+        config
+      );
+
+      dispatch(actualizarProyecto(data.proyecto));
+      dispatch(
+        mostrarAlertaAction({
+          msg: data.msg,
+          error: false,
+        })
+      );
+    } catch (error) {
+      dispatch(
+        mostrarAlertaAction({
+          msg:
+            error.response && error.response.data.msg
+              ? error.response.data.msg
+              : error.message,
+          error: true,
+        })
+      );
+    }
+  };
