@@ -7,14 +7,13 @@ import Swal from 'sweetalert2';
 import { useSelector } from 'react-redux';
 import FormularioProyecto from '../components/FormularioProyecto';
 import { eliminarProyectoAction } from '../redux/proyectosSlice';
-import Alerta from '../components/Alerta';
 
 export default function EditarProyecto() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
 
-  const { proyecto, alerta } = useSelector((state) => state.proyectos);
+  const { proyecto } = useSelector((state) => state.proyectos);
   const { nombre } = proyecto;
 
   useEffect(() => {
@@ -40,8 +39,6 @@ export default function EditarProyecto() {
     });
   };
 
-  const { msg } = alerta;
-
   return (
     <>
       <div className="flex justify-between">
@@ -49,7 +46,7 @@ export default function EditarProyecto() {
           Editar Proyecto: {nombre}
         </h1>
 
-        {msg && <Alerta alerta={alerta} />}
+       
 
         <div className="flex items-center gap-2 text-gray-400 hover:text-black">
           <svg

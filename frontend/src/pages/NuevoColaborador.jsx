@@ -23,7 +23,7 @@ export default function NuevoColaborador() {
     obtenerProyecto();
   }, [id, dispatch]);
 
-  if (!proyecto._id) {
+  if (!proyecto?._id) {
     return <Alerta alerta={{ msg: 'Proyecto no encontrado' }} />;
   }
 
@@ -36,7 +36,7 @@ export default function NuevoColaborador() {
         <FormularioColaborador />
       </div>
 
-      {colaborador.nombre ? (
+      {colaborador?.nombre ? (
         <div className="flex justify-center mt-10">
           <div className="bg-white py-10 px-5 md:w-1/2 rounded-lg shadow-lg">
             <h2 className="text-center mb-10 text-2xl font-bold">Resultado:</h2>

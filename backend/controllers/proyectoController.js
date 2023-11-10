@@ -67,7 +67,7 @@ const actualizarProyecto = async (req, res) => {
       req.body,
       { new: true }
     );
-
+      console.log(proyectoActualizado);
     res.json({
       msg: 'Proyecto actualizado correctamente',
       proyectoActualizado,

@@ -30,19 +30,16 @@ const proyectosSlice = createSlice({
       );
     },
     actualizarProyecto: (state, action) => {
-      state.proyectos = state.proyectos.map((proyecto) =>
-        proyecto._id === action.payload._id ? action.payload : proyecto
-      );
-      state.colaborador = {};
-    },
-    actualizarColaborador: (state, action) => {
-      state.proyecto = {
-        ...state.proyecto,
-        colaboradores: state.proyecto.colaboradores.filter(
-          (colaborador) => colaborador._id !== action.payload
+      state.proyectos = {
+        ...state.proyectos,
+        proyectos: state.proyectos.map((proyecto) =>
+          proyecto._id === action.payload._id ? action.payload : proyecto
         ),
       };
+
+      state.colaborador = {};
     },
+
     mostrarAlerta: (state, action) => {
       state.alerta = action.payload;
     },
@@ -77,6 +74,14 @@ const proyectosSlice = createSlice({
     findColaborador: (state, action) => {
       state.colaborador = action.payload;
     },
+    eliminarColaborador: (state, action) => {
+      state.proyecto = {
+        ...state.proyecto,
+        colaboradores: state.proyecto.colaboradores.filter(
+          (colaborador) => colaborador._id !== action.payload
+        ),
+      };
+    },
   },
 });
 
@@ -93,7 +98,7 @@ export const {
   actualizarTarea,
   eliminarTarea,
   findColaborador,
-  actualizarColaborador,
+  eliminarColaborador,
 } = proyectosSlice.actions;
 
 export default proyectosSlice.reducer;
@@ -102,7 +107,7 @@ export const mostrarAlertaAction = (alerta) => (dispatch) => {
   dispatch(mostrarAlerta(alerta));
   setTimeout(() => {
     dispatch(mostrarAlerta({}));
-  }, 2000);
+  }, 3000);
 };
 
 export const mostrarModalFormularioTareaAction = () => (dispatch) => {
@@ -199,7 +204,8 @@ export const actualizarProyectoAction = (proyecto) => async (dispatch) => {
       proyecto,
       config
     );
-    dispatch(actualizarProyecto(data));
+    console.log(data);
+    dispatch(actualizarProyecto(data.proyectoActualizado));
     dispatch(
       mostrarAlertaAction({
         msg: data.msg,
@@ -410,6 +416,7 @@ export const agregarColaboradorAction =
         })
       );
     } catch (error) {
+      console.log(error);
       dispatch(
         mostrarAlertaAction({
           msg:
@@ -438,7 +445,7 @@ export const eliminarColaboradorAction =
         config
       );
 
-      dispatch(actualizarColaborador(idColaborador));
+      dispatch(eliminarColaborador(idColaborador));
       dispatch(
         mostrarAlertaAction({
           msg: data.msg,

@@ -77,6 +77,7 @@ const actualizarTarea = async (req, res) => {
       req.body,
       { new: true }
     );
+    
     res.json({
       msg: 'Tarea actualizada correctamente',
       tarea: actualizarTarea,
