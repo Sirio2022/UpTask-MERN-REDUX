@@ -29,7 +29,12 @@ const nuevoProyecto = async (req, res) => {
 
 const obtenerProyecto = async (req, res) => {
   try {
-    const proyecto = await Proyecto.findById(req.params.id).populate('tareas');
+    const proyecto = await Proyecto.findById(req.params.id)
+      .populate('tareas')
+      .populate(
+        'colaboradores',
+        '-password -__v -confirmado -createdAt -token -updatedAt'
+      );
 
     if (!proyecto) {
       const error = new Error('Proyecto no encontrado');
@@ -154,7 +159,40 @@ const agregarColaborador = async (req, res) => {
   res.status(200).json({ msg: 'Colaborador agregado correctamente' });
 };
 
-const eliminarColaborador = async (req, res) => {};
+const eliminarColaborador = async (req, res) => {
+  const proyecto = await Proyecto.findById(req.params.id);
+
+  if (!proyecto) {
+    const error = new Error('Proyecto no encontrado');
+    res.status(404).json({ msg: error.message });
+    return;
+  } else if (proyecto.creador.toString() !== req.usuario._id.toString()) {
+    const error = new Error(
+      'No autorizado para eliminar colaboradores de este proyecto'
+    );
+    res.status(401).json({ msg: error.message });
+    return;
+  }
+
+  const colaborador = await Usuario.findById(req.params.idColaborador);
+
+  if (!colaborador) {
+    const error = new Error('Colaborador no encontrado');
+    res.status(404).json({ msg: error.message });
+    return;
+  }
+
+  // El colaborador no está agregado al proyecto
+  if (!proyecto.colaboradores.includes(colaborador._id.toString())) {
+    const error = new Error('El colaborador no está agregado al proyecto');
+    res.status(400).json({ msg: error.message });
+    return;
+  }
+
+  proyecto.colaboradores.pull(colaborador._id);
+  await proyecto.save();
+  res.status(200).json({ msg: 'Colaborador eliminado correctamente' });
+};
 
 export {
   obtenerProyectos,

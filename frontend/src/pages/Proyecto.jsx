@@ -3,15 +3,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { obtenerProyectoAction } from '../redux/proyectosSlice';
 import Spinner from '../components/Spinner';
+import Alerta from '../components/Alerta';
 
 import ModalFormularioTarea from '../components/ModalFormularioTarea';
 import { mostrarModalFormularioTareaAction } from '../redux/proyectosSlice';
 import Tarea from '../components/Tarea';
 
+import Colaborador from '../components/Colaborador';
+
 export default function Proyecto() {
   const [loading, setLoading] = useState(false);
 
-  const { proyecto } = useSelector((state) => state.proyectos);
+  const { proyecto, alerta } = useSelector((state) => state.proyectos);
 
   const { nombre } = proyecto;
 
@@ -27,6 +30,8 @@ export default function Proyecto() {
     };
     obtenerProyecto();
   }, [id, dispatch]);
+
+  const { msg } = alerta;
 
   return (
     <div>
@@ -83,6 +88,7 @@ export default function Proyecto() {
             Nueva Tarea
           </button>
 
+          {msg && <Alerta alerta={alerta} />}
           <p className="font-bold text-xl mt-10">Tareas del Proyecto</p>
 
           <div className="bg-white shadow-xl mt-10 rounded-lg">
@@ -120,6 +126,17 @@ export default function Proyecto() {
                 Añadir
               </Link>
             </div>
+          </div>
+          <div className="bg-white shadow-xl mt-10 rounded-lg">
+            {proyecto.colaboradores?.length === 0 ? (
+              <p className="text-center text-gray-400 py-5">
+                No existen Colaboradores
+              </p>
+            ) : (
+              proyecto.colaboradores?.map((colaborador) => (
+                <Colaborador key={colaborador._id} colaborador={colaborador} />
+              ))
+            )}
           </div>
 
           <ModalFormularioTarea />

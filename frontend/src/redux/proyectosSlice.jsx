@@ -35,6 +35,14 @@ const proyectosSlice = createSlice({
       );
       state.colaborador = {};
     },
+    actualizarColaborador: (state, action) => {
+      state.proyecto = {
+        ...state.proyecto,
+        colaboradores: state.proyecto.colaboradores.filter(
+          (colaborador) => colaborador._id !== action.payload
+        ),
+      };
+    },
     mostrarAlerta: (state, action) => {
       state.alerta = action.payload;
     },
@@ -85,6 +93,7 @@ export const {
   actualizarTarea,
   eliminarTarea,
   findColaborador,
+  actualizarColaborador,
 } = proyectosSlice.actions;
 
 export default proyectosSlice.reducer;
@@ -394,6 +403,42 @@ export const agregarColaboradorAction =
       );
 
       dispatch(actualizarProyecto(data.proyecto));
+      dispatch(
+        mostrarAlertaAction({
+          msg: data.msg,
+          error: false,
+        })
+      );
+    } catch (error) {
+      dispatch(
+        mostrarAlertaAction({
+          msg:
+            error.response && error.response.data.msg
+              ? error.response.data.msg
+              : error.message,
+          error: true,
+        })
+      );
+    }
+  };
+
+export const eliminarColaboradorAction =
+  (idColaborador) => async (dispatch, getState) => {
+    const { _id } = getState().proyectos.proyecto;
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      };
+      const { data } = await clienteAxios.delete(
+        `/proyectos/colaboradores/${_id}/${idColaborador}`,
+        config
+      );
+
+      dispatch(actualizarColaborador(idColaborador));
       dispatch(
         mostrarAlertaAction({
           msg: data.msg,
