@@ -7,6 +7,7 @@ const initialState = {
   tarea: {},
   alerta: {},
   modalFormularioTarea: false,
+  colaborador: {},
 };
 
 const proyectosSlice = createSlice({
@@ -64,6 +65,9 @@ const proyectosSlice = createSlice({
         ),
       };
     },
+    agregarColaborador: (state, action) => {
+      state.colaborador = action.payload;
+    },
   },
 });
 
@@ -79,6 +83,7 @@ export const {
   editarTarea,
   actualizarTarea,
   eliminarTarea,
+  agregarColaborador,
 } = proyectosSlice.actions;
 
 export default proyectosSlice.reducer;
@@ -333,4 +338,38 @@ export const eliminarTareaAction = (id) => async (dispatch) => {
 export const handleModalEditarTareaAction = (tarea) => (dispatch) => {
   dispatch(editarTarea(tarea));
   dispatch(mostrarModalFormularioTarea(true));
+};
+
+export const agregarColaboradorAction = (email) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  };
+  try {
+    const { data } = await clienteAxios.post(
+      `/proyectos/colaboradores`,
+      { email },
+      config
+    );
+    dispatch(agregarColaborador(data));
+    dispatch(
+      mostrarAlertaAction({
+        msg: data.msg,
+        error: false,
+      })
+    );
+  } catch (error) {
+    console.log(error);
+    dispatch(
+      mostrarAlertaAction({
+        msg:
+          error.response && error.response.data.msg
+            ? error.response.data.msg
+            : error.message,
+        error: true,
+      })
+    );
+  }
 };
