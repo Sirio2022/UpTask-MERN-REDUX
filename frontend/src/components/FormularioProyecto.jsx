@@ -72,7 +72,7 @@ export default function FormularioProyecto() {
         setCliente('');
         setTimeout(() => {
           navigate('/proyectos');
-        }, 3500);
+        }, 3000);
       } catch (error) {
         console.log(error);
       }
@@ -93,7 +93,7 @@ export default function FormularioProyecto() {
         setCliente('');
         setTimeout(() => {
           navigate('/proyectos');
-        }, 3500);
+        }, 3000);
       } catch (error) {
         console.log(error);
       }

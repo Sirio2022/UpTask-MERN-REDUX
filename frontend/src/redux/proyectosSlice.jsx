@@ -200,7 +200,7 @@ export const actualizarProyectoAction = (proyecto) => async (dispatch) => {
       proyecto,
       config
     );
-    
+
     dispatch(actualizarProyecto(data.proyectoActualizado));
     dispatch(
       mostrarAlertaAction({
@@ -265,6 +265,7 @@ export const crearTareaAction = (tarea) => async (dispatch) => {
         tarea,
         config
       );
+
       dispatch(actualizarTarea(data.tarea));
 
       dispatch(
@@ -403,7 +404,7 @@ export const agregarColaboradorAction =
         { email },
         config
       );
-     
+
       dispatch(actualizarProyecto(data.proyecto));
       dispatch(
         mostrarAlertaAction({
