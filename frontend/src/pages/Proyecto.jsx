@@ -48,7 +48,6 @@ export default function Proyecto() {
         <Spinner />
       ) : msg && alerta.error ? (
         <Alerta alerta={alerta} />
-     
       ) : (
         <>
           <div className="flex justify-between">
