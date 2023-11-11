@@ -33,7 +33,6 @@ const proyectosSlice = createSlice({
       state.proyectos = state.proyectos.map((proyecto) =>
         proyecto._id === action.payload._id ? action.payload : proyecto
       );
-      state.colaborador = {};
     },
 
     mostrarAlerta: (state, action) => {
@@ -85,6 +84,7 @@ const proyectosSlice = createSlice({
           colaborador._id === action.payload._id ? action.payload : colaborador
         ),
       };
+      state.colaborador = {};
     },
   },
 });
