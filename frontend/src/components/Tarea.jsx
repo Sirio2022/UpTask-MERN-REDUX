@@ -10,7 +10,7 @@ import { formatearFecha } from '../helpers/formatearFecha';
 
 import Swal from 'sweetalert2';
 
-export default function Tarea({ tarea }) {
+export default function Tarea({ tarea, accesoAutorizado }) {
   const { nombre, descripcion, prioridad, fechaEntrega, estado } = tarea;
 
   const dispatch = useDispatch();
@@ -26,7 +26,11 @@ export default function Tarea({ tarea }) {
     }).then((result) => {
       if (result.isConfirmed) {
         dispatch(eliminarTareaAction(tarea._id));
-        Swal.fire('Eliminada', 'La tarea ha sido eliminada correctamente!', 'success');
+        Swal.fire(
+          'Eliminada',
+          'La tarea ha sido eliminada correctamente!',
+          'success'
+        );
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire('Cancelado', 'La tarea no se ha eliminado', 'error');
       }
@@ -57,13 +61,15 @@ export default function Tarea({ tarea }) {
       </div>
 
       <div className="flex gap-2">
-        <button
-          type="button"
-          className="bg-red-600 text-white font-bold text-sm px-4 py-3 rounded-lg uppercase"
-          onClick={() => dispatch(handleModalEditarTareaAction(tarea))}
-        >
-          Editar
-        </button>
+        {accesoAutorizado() && (
+          <button
+            type="button"
+            className="bg-red-600 text-white font-bold text-sm px-4 py-3 rounded-lg uppercase"
+            onClick={() => dispatch(handleModalEditarTareaAction(tarea))}
+          >
+            Editar
+          </button>
+        )}
         {estado ? (
           <button
             type="button"
@@ -79,13 +85,15 @@ export default function Tarea({ tarea }) {
             Incompleta
           </button>
         )}
-        <button
-          type="button"
-          className="bg-indigo-600 text-white font-bold text-sm px-4 py-3 rounded-lg uppercase"
-          onClick={handleClick}
-        >
-          Eliminar
-        </button>
+        {accesoAutorizado() && (
+          <button
+            type="button"
+            className="bg-indigo-600 text-white font-bold text-sm px-4 py-3 rounded-lg uppercase"
+            onClick={handleClick}
+          >
+            Eliminar
+          </button>
+        )}
       </div>
     </div>
   );
@@ -93,4 +101,5 @@ export default function Tarea({ tarea }) {
 
 Tarea.propTypes = {
   tarea: PropTypes.object.isRequired,
+  accesoAutorizado: PropTypes.func.isRequired,
 };
