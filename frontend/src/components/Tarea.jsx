@@ -4,14 +4,13 @@ import { useDispatch } from 'react-redux';
 import {
   handleModalEditarTareaAction,
   eliminarTareaAction,
+  completarTareaAction,
 } from '../redux/proyectosSlice';
-
 import { formatearFecha } from '../helpers/formatearFecha';
-
 import Swal from 'sweetalert2';
 
 export default function Tarea({ tarea, accesoAutorizado }) {
-  const { nombre, descripcion, prioridad, fechaEntrega, estado } = tarea;
+  const { nombre, descripcion, prioridad, fechaEntrega, estado, _id } = tarea;
 
   const dispatch = useDispatch();
 
@@ -70,21 +69,16 @@ export default function Tarea({ tarea, accesoAutorizado }) {
             Editar
           </button>
         )}
-        {estado ? (
-          <button
-            type="button"
-            className="bg-sky-600 text-white font-bold text-sm px-4 py-3 rounded-lg uppercase"
-          >
-            completa
-          </button>
-        ) : (
-          <button
-            type="button"
-            className="bg-gray-600 text-white font-bold text-sm px-4 py-3 rounded-lg uppercase"
-          >
-            Incompleta
-          </button>
-        )}
+
+        <button
+          type="button"
+          className={`${
+            estado ? ' bg-sky-600' : 'bg-gray-600'
+          } text-white font-bold text-sm px-4 py-3 rounded-lg uppercase`}
+          onClick={() => dispatch(completarTareaAction(_id))}
+        >
+          {estado ? 'Completada' : 'Incompleta'}
+        </button>
         {accesoAutorizado() && (
           <button
             type="button"

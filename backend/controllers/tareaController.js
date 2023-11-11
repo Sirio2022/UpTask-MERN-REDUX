@@ -77,7 +77,7 @@ const actualizarTarea = async (req, res) => {
       req.body,
       { new: true }
     );
-    
+
     res.json({
       msg: 'Tarea actualizada correctamente',
       tarea: actualizarTarea,
@@ -104,7 +104,13 @@ const eliminarTarea = async (req, res) => {
       return res.status(401).json({ msg: error.message });
     }
 
-    await Tarea.findByIdAndDelete(req.params.id);
+    proyecto.tareas.pull(tarea._id);
+
+    await Promise.allSettled([
+      await proyecto.save(),
+      await Tarea.findByIdAndDelete(req.params.id),
+    ]);
+
     res.json({ msg: 'Tarea eliminada correctamente' });
   } catch (error) {
     console.log(error);
@@ -112,7 +118,40 @@ const eliminarTarea = async (req, res) => {
   }
 };
 
-const cambiarEstadoTarea = async (req, res) => {};
+const cambiarEstadoTarea = async (req, res) => {
+  try {
+    const tarea = await Tarea.findById({ _id: req.params.id }).populate(
+      'proyecto'
+    );
+
+    if (!tarea) {
+      const error = new Error('Tarea no encontrada');
+      return res.status(404).json({ msg: error.message });
+    }
+
+    const proyecto = await Proyecto.findById(tarea.proyecto);
+
+    if (
+      proyecto.creador.toString() !== req.usuario.id.toString() &&
+      !tarea.proyecto.colaboradores.some(
+        (colaborador) =>
+          colaborador._id.toString() === req.usuario._id.toString()
+      )
+    ) {
+      const error = new Error(
+        'No estás autorizado para cambiar el estado de esta tarea'
+      );
+      return res.status(401).json({ msg: error.message });
+    }
+
+    tarea.estado = !tarea.estado;
+    await tarea.save();
+    res.json(tarea);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: 'Hubo un error' });
+  }
+};
 
 export {
   agregarTarea,

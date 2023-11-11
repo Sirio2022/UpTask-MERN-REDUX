@@ -473,3 +473,29 @@ export const eliminarColaboradorAction =
       );
     }
   };
+
+export const completarTareaAction = (idTarea) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    };
+    const { data } = await clienteAxios.post(
+      `/tareas/estado/${idTarea}`,
+      {},
+      config
+    );
+
+    dispatch(actualizarTarea(data));
+    dispatch(
+      mostrarAlertaAction({
+        msg: data.msg,
+        error: false,
+      })
+    );
+  } catch (error) {
+    console.log(error.response);
+  }
+};
