@@ -3,7 +3,9 @@ import Usuario from '../models/Usuario.js';
 
 const obtenerProyectos = async (req, res) => {
   try {
-    const proyectos = await Proyecto.find({ creador: req.usuario._id })
+    const proyectos = await Proyecto.find({
+      $or: [{ creador: req.usuario._id }, { colaboradores: req.usuario._id }],
+    })
       .sort({
         createdAt: -1,
       })
@@ -39,7 +41,13 @@ const obtenerProyecto = async (req, res) => {
     if (!proyecto) {
       const error = new Error('Proyecto no encontrado');
       return res.status(404).json({ msg: error.message });
-    } else if (proyecto.creador.toString() !== req.usuario._id.toString()) {
+    } else if (
+      proyecto.creador.toString() !== req.usuario._id.toString() &&
+      !proyecto.colaboradores.some(
+        (colaborador) =>
+          colaborador._id.toString() === req.usuario._id.toString()
+      )
+    ) {
       const error = new Error('No autorizado para ver este proyecto');
       return res.status(401).json({ msg: error.message });
     }
@@ -156,7 +164,7 @@ const agregarColaborador = async (req, res) => {
   }
   proyecto.colaboradores.push(usuario._id);
   await proyecto.save();
-  res.status(200).json({ msg: 'Colaborador agregado correctamente' });
+  res.status(200).json({ msg: 'Colaborador agregado correctamente', usuario });
 };
 
 const eliminarColaborador = async (req, res) => {

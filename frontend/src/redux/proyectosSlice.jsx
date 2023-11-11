@@ -76,6 +76,7 @@ const proyectosSlice = createSlice({
           (colaborador) => colaborador._id !== action.payload
         ),
       };
+      state.colaborador = {};
     },
     actualizarProyectoColaborador: (state, action) => {
       state.proyecto = {
@@ -414,13 +415,14 @@ export const agregarColaboradorAction =
         config
       );
 
-      dispatch(actualizarProyectoColaborador(data.proyecto));
+      dispatch(actualizarProyectoColaborador(data.usuario));
       dispatch(
         mostrarAlertaAction({
           msg: data.msg,
           error: false,
         })
       );
+      dispatch(findColaborador({}));
     } catch (error) {
       console.log(error);
       dispatch(
@@ -432,6 +434,7 @@ export const agregarColaboradorAction =
           error: true,
         })
       );
+      dispatch(findColaborador({}));
     }
   };
 
