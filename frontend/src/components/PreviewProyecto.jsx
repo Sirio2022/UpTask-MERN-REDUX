@@ -7,7 +7,10 @@ export default function PreviewProyecto({ proyecto }) {
     <div className="border-b p-5 flex">
       <p className="flex-1">
         {nombre}
-        <span className="text-gray-500 font-bold text-sm"> - {cliente}</span>
+        <span className="text-gray-500 font-bold text-sm">
+          {' '}
+          - Cliente: {cliente}
+        </span>
       </p>
 
       <Link

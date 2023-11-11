@@ -31,7 +31,7 @@ const proyectosSlice = createSlice({
     },
     actualizarProyecto: (state, action) => {
       state.proyectos = state.proyectos.map((proyecto) =>
-        proyecto._id === action.payload ? action.payload : proyecto
+        proyecto._id === action.payload._id ? action.payload : proyecto
       );
       state.colaborador = {};
     },
@@ -78,6 +78,14 @@ const proyectosSlice = createSlice({
         ),
       };
     },
+    actualizarProyectoColaborador: (state, action) => {
+      state.proyecto = {
+        ...state.proyecto,
+        colaboradores: state.proyecto.colaboradores.map((colaborador) =>
+          colaborador._id === action.payload._id ? action.payload : colaborador
+        ),
+      };
+    },
   },
 });
 
@@ -95,6 +103,7 @@ export const {
   eliminarTarea,
   findColaborador,
   eliminarColaborador,
+  actualizarProyectoColaborador,
 } = proyectosSlice.actions;
 
 export default proyectosSlice.reducer;
@@ -405,7 +414,7 @@ export const agregarColaboradorAction =
         config
       );
 
-      dispatch(actualizarProyecto(data.proyecto));
+      dispatch(actualizarProyectoColaborador(data.proyecto));
       dispatch(
         mostrarAlertaAction({
           msg: data.msg,
