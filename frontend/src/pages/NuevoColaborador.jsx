@@ -38,7 +38,7 @@ export default function NuevoColaborador() {
 
       {colaborador?.nombre ? (
         <div className="flex justify-center mt-10">
-          <div className="bg-white py-10 px-5 md:w-1/2 rounded-lg shadow-lg">
+          <div className="bg-white w-full py-10 px-5 md:w-4/5 lg:w-1/2 rounded-lg shadow-lg">
             <h2 className="text-center mb-10 text-2xl font-bold">Resultado:</h2>
             <div className="flex justify-between items-center">
               <p>{colaborador.nombre}</p>

@@ -8,7 +8,7 @@ export default function PreviewProyecto({ proyecto }) {
 
   return (
     <div className="border-b p-5 flex justify-between">
-      <div className='flex items-center gap-2 '>
+      <div className="flex flex-col lg:flex-row items-start gap-2 ">
         <p className="flex-1">
           {nombre}
           <span className="text-gray-500 font-bold text-sm">
@@ -17,7 +17,11 @@ export default function PreviewProyecto({ proyecto }) {
           </span>
         </p>
 
-        {usuario._id !== creador && <p className='p-1 bg-green-500 text-xs rounded-xl text-white font-bold uppercase'>Colaborador</p>}
+        {usuario._id !== creador && (
+          <p className="p-1 bg-green-500 text-xs rounded-xl text-white font-bold uppercase">
+            Colaborador
+          </p>
+        )}
       </div>
 
       <Link

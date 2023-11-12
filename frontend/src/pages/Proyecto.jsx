@@ -116,7 +116,11 @@ export default function Proyecto() {
               <p className="text-center text-gray-400 py-5">No hay tareas</p>
             ) : (
               proyecto.tareas?.map((tarea) => (
-                <Tarea key={tarea._id} tarea={tarea} accesoAutorizado={accesoAutorizado} />
+                <Tarea
+                  key={tarea._id}
+                  tarea={tarea}
+                  accesoAutorizado={accesoAutorizado}
+                />
               ))
             )}
           </div>

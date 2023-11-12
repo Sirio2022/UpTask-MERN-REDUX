@@ -41,7 +41,7 @@ export default function Tarea({ tarea, accesoAutorizado }) {
       key={tarea._id}
       className="border-b p-5 flex justify-between items-center"
     >
-      <div>
+      <div className="flex flex-col items-start">
         <p className="text-xl uppercase">Tarea: {nombre}</p>
         <p className="text-sm text-gray-500 uppercase">
           Descripción: {descripcion}
@@ -57,9 +57,14 @@ export default function Tarea({ tarea, accesoAutorizado }) {
           </span>{' '}
           {prioridad}
         </p>
+        {estado && (
+          <p className="text-xs font-bold uppercase bg-green-600 rounded-lg p-1 text-white">
+            Completada por: {tarea.completado.nombre}{' '}
+          </p>
+        )}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-col lg:flex-row gap-2">
         {accesoAutorizado() && (
           <button
             type="button"

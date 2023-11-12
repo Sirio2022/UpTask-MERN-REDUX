@@ -32,7 +32,14 @@ const nuevoProyecto = async (req, res) => {
 const obtenerProyecto = async (req, res) => {
   try {
     const proyecto = await Proyecto.findById(req.params.id)
-      .populate('tareas')
+      .populate({
+        path: 'tareas',
+        options: { sort: { createdAt: -1 } },
+        populate: {
+          path: 'completado',
+          select: '-password -__v -confirmado -createdAt -token -updatedAt',
+        },
+      })
       .populate(
         'colaboradores',
         '-password -__v -confirmado -createdAt -token -updatedAt'
