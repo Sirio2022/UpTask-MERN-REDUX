@@ -4,6 +4,7 @@ import clienteAxios from '../config/clienteAxios';
 const initialState = {
   proyectos: [],
   proyecto: {},
+  modalBuscadorProyectos: false,
   tarea: {},
   alerta: {},
   modalFormularioTarea: false,
@@ -40,6 +41,9 @@ const proyectosSlice = createSlice({
     },
     mostrarModalFormularioTarea: (state, action) => {
       state.modalFormularioTarea = action.payload;
+    },
+    mostrarModalBuscadorProyectos: (state, action) => {
+      state.modalBuscadorProyectos = action.payload;
     },
     crearTarea: (state, action) => {
       state.proyecto = {
@@ -98,6 +102,7 @@ export const {
   actualizarProyecto,
   mostrarAlerta,
   mostrarModalFormularioTarea,
+  mostrarModalBuscadorProyectos,
   crearTarea,
   editarTarea,
   actualizarTarea,
@@ -119,6 +124,19 @@ export const mostrarAlertaAction = (alerta) => (dispatch) => {
 export const mostrarModalFormularioTareaAction = () => (dispatch) => {
   dispatch(mostrarModalFormularioTarea(true));
   dispatch(editarTarea({}));
+};
+
+export const mostrarModalFormularioTareaCloseAction = () => (dispatch) => {
+  dispatch(mostrarModalFormularioTarea(false));
+  dispatch(editarTarea({}));
+};
+
+export const mostrarModalBuscadorProyectosAction = () => (dispatch) => {
+  dispatch(mostrarModalBuscadorProyectos(true));
+};
+
+export const mostrarModalBuscadorProyectosCloseAction = () => (dispatch) => {
+  dispatch(mostrarModalBuscadorProyectos(false));
 };
 
 export const crearProyectoAction = (proyecto) => async (dispatch) => {
