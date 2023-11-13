@@ -46,15 +46,23 @@ import { Server } from 'socket.io';
 const io = new Server(servidor, {
   pingTimeout: 60000,
   cors: {
-    origin: [process.env.FRONTEND_URL],
-  
+    origin: process.env.FRONTEND_URL,
+    methods: ['GET', 'POST'],
   },
 });
 
 io.on('connection', (socket) => {
-  console.log('Nueva conexión', socket.id);
+  console.log('Nueva conexión de socketIO');
 
   // Definir los eventos que se van a escuchar
-  
-  
+  socket.on('abrir-proyecto', (proyecto) => {
+    console.log('Abriendo proyecto', proyecto);
+    socket.join(proyecto);
+  });
+
+  socket.on('nueva-tarea', (tarea) => {
+    console.log('Nueva tarea', tarea.proyecto);
+    io.to(tarea.proyecto);
+    socket.emit('tarea-agregada', tarea);
+  });
 });

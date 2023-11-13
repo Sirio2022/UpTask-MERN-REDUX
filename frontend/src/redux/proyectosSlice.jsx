@@ -1,5 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import clienteAxios from '../config/clienteAxios';
+import io from 'socket.io-client';
+
+let socket;
 
 const initialState = {
   proyectos: [],
@@ -202,6 +205,9 @@ export const obtenerProyectoAction = (id) => async (dispatch) => {
     const { data } = await clienteAxios.get(`/proyectos/${id}`, config);
 
     dispatch(obtenerProyecto(data));
+
+    socket = io(import.meta.env.VITE_BACKEND_URL);
+    socket.emit('abrir-proyecto', data._id);
   } catch (error) {
     dispatch(
       mostrarAlertaAction({
@@ -324,7 +330,12 @@ export const crearTareaAction = (tarea) => async (dispatch) => {
       };
       const { data } = await clienteAxios.post('/tareas', tarea, config);
 
-      dispatch(crearTarea(data.tarea));
+      socket = io(import.meta.env.VITE_BACKEND_URL);
+      socket.emit('nueva-tarea', data.tarea);
+      socket.on('tarea-agregada', (tareaNueva) => {
+        dispatch(crearTarea(tareaNueva));
+      });
+
       dispatch(
         mostrarAlertaAction({
           msg: data.msg,
