@@ -8,7 +8,6 @@ export default function Proyectos() {
   const [loading, setLoading] = useState(false);
   const { proyectos } = useSelector((state) => state.proyectos);
 
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,8 +18,6 @@ export default function Proyectos() {
     };
     obtenerProyectos();
   }, [dispatch]);
-
- 
 
   return (
     <>
@@ -37,7 +34,7 @@ export default function Proyectos() {
           ) : (
             <>
               {proyectos?.map((proyecto) => (
-                <PreviewProyecto key={proyecto._id} proyecto={proyecto}  />
+                <PreviewProyecto key={proyecto._id} proyecto={proyecto} />
               ))}
             </>
           )}

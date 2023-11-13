@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Combobox, Dialog, Transition } from '@headlessui/react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   mostrarModalBuscadorProyectosCloseAction,
   obtenerProyectosAction,
@@ -13,6 +14,7 @@ function classNames(...classes) {
 const Busqueda = () => {
   const [busqueda, setBusqueda] = useState('');
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { modalBuscadorProyectos, proyectos } = useSelector(
@@ -68,13 +70,11 @@ const Busqueda = () => {
           <Combobox
             as="div"
             className="mx-auto max-w-xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all"
-            onChange={(proyecto) =>
-              (window.location = `/proyectos/${proyecto._id}`)
-            }
+            onChange={(proyecto) => navigate(`/proyectos/${proyecto._id}`)}
           >
             <div className="relative">
               <Combobox.Input
-                className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-800 placeholder-gray-400 focus:ring-0 sm:text-sm"
+                className="h-12 w-full border-0 bg-transparent pl-4 pr-4 text-gray-800 placeholder-gray-400 focus:ring-0 sm:text-sm"
                 placeholder="Buscar..."
                 onChange={(e) => setBusqueda(e.target.value)}
               />
