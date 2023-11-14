@@ -159,7 +159,7 @@ const ModalFormularioTarea = () => {
                         id="nombre"
                         className="w-full border border-gray-400 rounded-lg px-3 py-2 mt-1 mb-5 text-sm text-gray-900"
                         placeholder="Nombre Tarea"
-                        value={nombre}
+                        value={nombre || ''}
                         onChange={(e) => setNombre(e.target.value)}
                       />
                     </div>
@@ -176,7 +176,7 @@ const ModalFormularioTarea = () => {
                         id="descripcion"
                         className="w-full border border-gray-400 rounded-lg px-3 py-2 mt-1 mb-5 text-sm text-gray-900"
                         placeholder="Descripción Tarea"
-                        value={descripcion}
+                        value={descripcion || ''}
                         onChange={(e) => setDescripcion(e.target.value)}
                       />
                     </div>
@@ -193,7 +193,7 @@ const ModalFormularioTarea = () => {
                         name="fecha-entrega"
                         id="fecha-entrega"
                         className="w-full border border-gray-400 rounded-lg px-3 py-2 mt-1 mb-5 text-sm text-gray-900"
-                        value={fechaEntrega}
+                        value={fechaEntrega || ''}
                         onChange={(e) => setFechaEntrega(e.target.value)}
                       />
                     </div>
@@ -209,7 +209,7 @@ const ModalFormularioTarea = () => {
                         name="prioridad"
                         id="prioridad"
                         className="w-full border border-gray-400 rounded-lg px-3 py-2 mt-1 mb-5 text-sm text-gray-900"
-                        value={prioridad}
+                        value={prioridad || ''}
                         onChange={(e) => setPrioridad(e.target.value)}
                       >
                         <option value="">-- Seleccione --</option>

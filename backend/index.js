@@ -47,7 +47,7 @@ const io = new Server(servidor, {
   pingTimeout: 60000,
   cors: {
     origin: process.env.FRONTEND_URL,
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
   },
 });
 
@@ -60,7 +60,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on('nueva-tarea', (tarea) => {
-    io.to(tarea.proyecto);
-    socket.emit('tarea-agregada', tarea);
+    io.to(tarea.proyecto).emit('tarea-agregada', tarea);
   });
 });
