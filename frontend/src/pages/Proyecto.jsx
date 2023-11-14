@@ -20,7 +20,7 @@ export default function Proyecto() {
   const [loading, setLoading] = useState(false);
 
   const { proyecto, alerta } = useSelector((state) => state.proyectos);
-  console.log(proyecto);
+
   const { usuario } = useSelector((state) => state.perfil);
 
   const { nombre } = proyecto;
