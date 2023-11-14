@@ -38,7 +38,7 @@ export default function Tarea({ tarea, accesoAutorizado }) {
 
   return (
     <div
-      key={tarea._id}
+      key={_id}
       className="border-b p-5 flex justify-between items-center"
     >
       <div className="flex flex-col items-start">

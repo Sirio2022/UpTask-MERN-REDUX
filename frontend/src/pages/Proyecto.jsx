@@ -6,10 +6,12 @@ import Spinner from '../components/Spinner';
 import Alerta from '../components/Alerta';
 
 import ModalFormularioTarea from '../components/ModalFormularioTarea';
-import { mostrarModalFormularioTareaAction } from '../redux/proyectosSlice';
+import { mostrarModalFormularioTareaAction, crearTarea } from '../redux/proyectosSlice';
 import Tarea from '../components/Tarea';
 
 import Colaborador from '../components/Colaborador';
+
+import socket from '../config/socket';
 
 export default function Proyecto() {
   const [loading, setLoading] = useState(false);
@@ -40,6 +42,12 @@ export default function Proyecto() {
       }, 3000);
     }
   }, [alerta, navigate]);
+
+  useEffect(() => {
+    socket.on('tarea-agregada', (tareaNueva) => {
+      dispatch(crearTarea(tareaNueva));
+    }, [dispatch]);
+  });
 
   const accesoAutorizado = () => {
     return proyecto.creador === usuario._id;

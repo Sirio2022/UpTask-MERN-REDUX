@@ -55,11 +55,14 @@ io.on('connection', (socket) => {
   console.log('Nueva conexión de socketIO');
 
   // Definir los eventos que se van a escuchar
-  socket.on('abrir-proyecto', (proyecto) => {
-    socket.join(proyecto);
+  socket.on('abrir-proyecto', (proyectoID) => {
+    console.log('Abriendo proyecto: ', proyectoID);
+    socket.join(proyectoID);
+    console.log('Proyecto abierto: ', socket.rooms);
   });
 
   socket.on('nueva-tarea', (tarea) => {
+    console.log('Nueva tarea: ', tarea);
     io.to(tarea.proyecto).emit('tarea-agregada', tarea);
   });
 });
