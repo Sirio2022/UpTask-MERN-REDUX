@@ -6,7 +6,10 @@ import Spinner from '../components/Spinner';
 import Alerta from '../components/Alerta';
 
 import ModalFormularioTarea from '../components/ModalFormularioTarea';
-import { mostrarModalFormularioTareaAction, crearTarea } from '../redux/proyectosSlice';
+import {
+  mostrarModalFormularioTareaAction,
+  crearTarea,
+} from '../redux/proyectosSlice';
 import Tarea from '../components/Tarea';
 
 import Colaborador from '../components/Colaborador';
@@ -17,6 +20,7 @@ export default function Proyecto() {
   const [loading, setLoading] = useState(false);
 
   const { proyecto, alerta } = useSelector((state) => state.proyectos);
+  console.log(proyecto);
   const { usuario } = useSelector((state) => state.perfil);
 
   const { nombre } = proyecto;
@@ -28,9 +32,7 @@ export default function Proyecto() {
   useEffect(() => {
     const obtenerProyecto = async () => {
       setLoading(true);
-      await dispatch(obtenerProyectoAction(id));
-
-      setLoading(false);
+      await dispatch(obtenerProyectoAction(id)).then(() => setLoading(false));
     };
     obtenerProyecto();
   }, [id, dispatch]);
@@ -44,10 +46,17 @@ export default function Proyecto() {
   }, [alerta, navigate]);
 
   useEffect(() => {
-    socket.on('tarea-agregada', (tareaNueva) => {
+    const handleTareaAgregada = (tareaNueva) => {
       dispatch(crearTarea(tareaNueva));
-    }, [dispatch]);
-  });
+    };
+
+    socket.on('tarea-agregada', handleTareaAgregada);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      socket.off('tarea-agregada', handleTareaAgregada);
+    };
+  }, [dispatch]);
 
   const accesoAutorizado = () => {
     return proyecto.creador === usuario._id;
