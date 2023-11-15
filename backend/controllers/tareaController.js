@@ -111,7 +111,7 @@ const eliminarTarea = async (req, res) => {
       await Tarea.findByIdAndDelete(req.params.id),
     ]);
 
-    res.json({ msg: 'Tarea eliminada correctamente' });
+    res.json({ msg: 'Tarea eliminada correctamente', tarea });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: 'Hubo un error' });
