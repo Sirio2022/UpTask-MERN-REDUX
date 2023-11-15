@@ -297,7 +297,7 @@ export const crearTareaAction = (tarea) => async (dispatch) => {
         config
       );
 
-      dispatch(actualizarTarea(data.tarea));
+      socket.emit('actualizar-tarea', data.tarea);
 
       dispatch(
         mostrarAlertaAction({
@@ -359,7 +359,6 @@ export const eliminarTareaAction = (id) => async (dispatch) => {
   };
   try {
     const { data } = await clienteAxios.delete(`/tareas/${id}`, config);
-    
 
     socket.emit('eliminar-tarea', data.tarea);
 

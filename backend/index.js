@@ -64,7 +64,10 @@ io.on('connection', (socket) => {
   });
 
   socket.on('eliminar-tarea', (tarea) => {
-    
     io.to(tarea.proyecto).emit('tarea-eliminada', tarea._id);
+  });
+
+  socket.on('actualizar-tarea', (tarea) => {
+    io.to(tarea.proyecto).emit('tarea-actualizada', tarea);
   });
 });

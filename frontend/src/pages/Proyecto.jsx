@@ -1,7 +1,11 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { eliminarTarea, obtenerProyectoAction } from '../redux/proyectosSlice';
+import {
+  actualizarTarea,
+  eliminarTarea,
+  obtenerProyectoAction,
+} from '../redux/proyectosSlice';
 import Spinner from '../components/Spinner';
 import Alerta from '../components/Alerta';
 
@@ -54,17 +58,20 @@ export default function Proyecto() {
       dispatch(eliminarTarea(tareaEliminadaID));
     };
 
-    
+    const handleTareaEditada = (tareaEditada) => {
+      dispatch(actualizarTarea(tareaEditada));
+    };
+
     socket.on('tarea-agregada', handleTareaAgregada);
     socket.on('tarea-eliminada', handleTareaEliminada);
+    socket.on('tarea-actualizada', handleTareaEditada);
 
     // Clean up the event listener when the component unmounts
     return () => {
       socket.off('tarea-agregada', handleTareaAgregada);
       socket.off('tarea-eliminada', handleTareaEliminada);
+      socket.off('tarea-actualizada', handleTareaEditada);
     };
-
-    
   }, [dispatch]);
 
   const accesoAutorizado = () => {
