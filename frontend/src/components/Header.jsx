@@ -1,11 +1,21 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Busqueda from './Busqueda';
 import { mostrarModalBuscadorProyectosAction } from '../redux/proyectosSlice';
-import { useDispatch } from 'react-redux';
+import { cerrarSesionPerfilAction } from '../redux/perfilSlice';
+import { cerrarSesionLoginAction } from '../redux/loginSlice';
+import { cerrarSesionProyectosAction } from '../redux/proyectosSlice';
 
 export default function Header() {
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const handleCerrarSesion = () => {
+    dispatch(cerrarSesionPerfilAction());
+    dispatch(cerrarSesionLoginAction());
+    dispatch(cerrarSesionProyectosAction());
+    navigate('/');
+  };
 
   return (
     <header className="px-4 py-5 bg-white border-b">
@@ -30,6 +40,7 @@ export default function Header() {
           <button
             type="button"
             className="bg-sky-500 p-3 rounded-lg text-white font-bold uppercase text-sm"
+            onClick={handleCerrarSesion}
           >
             Cerrar Sesión
           </button>

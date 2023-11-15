@@ -62,15 +62,21 @@ export default function Proyecto() {
       dispatch(actualizarTarea(tareaEditada));
     };
 
+    const handleCompletarTarea = (tareaCompletada) => {
+      dispatch(actualizarTarea(tareaCompletada));
+    };
+
     socket.on('tarea-agregada', handleTareaAgregada);
     socket.on('tarea-eliminada', handleTareaEliminada);
     socket.on('tarea-actualizada', handleTareaEditada);
+    socket.on('tarea-completada', handleCompletarTarea);
 
     // Clean up the event listener when the component unmounts
     return () => {
       socket.off('tarea-agregada', handleTareaAgregada);
       socket.off('tarea-eliminada', handleTareaEliminada);
       socket.off('tarea-actualizada', handleTareaEditada);
+      socket.off('tarea-completada', handleCompletarTarea);
     };
   }, [dispatch]);
 

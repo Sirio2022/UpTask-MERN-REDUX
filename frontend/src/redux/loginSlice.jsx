@@ -23,6 +23,11 @@ export const { login, loginAlerta } = loginSlice.actions;
 
 export default loginSlice.reducer;
 
+export const cerrarSesionLoginAction = () => (dispatch) => {
+  dispatch(login({}));
+  localStorage.removeItem('token');
+};
+
 export const mostrarAlertaAction = (alerta) => (dispatch) => {
   dispatch(loginAlerta(alerta));
   setTimeout(() => {

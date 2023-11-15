@@ -28,6 +28,12 @@ export const { usuario, authError, clearError } = perfilSlice.actions;
 
 export default perfilSlice.reducer;
 
+export const cerrarSesionPerfilAction = () => (dispatch) => {
+  dispatch(usuario({}));
+
+  localStorage.removeItem('perfil');
+};
+
 export const autenticarUsuario = () => async (dispatch) => {
   const config = {
     headers: {

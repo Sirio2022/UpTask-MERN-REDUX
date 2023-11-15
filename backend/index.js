@@ -70,4 +70,8 @@ io.on('connection', (socket) => {
   socket.on('actualizar-tarea', (tarea) => {
     io.to(tarea.proyecto).emit('tarea-actualizada', tarea);
   });
+
+  socket.on('completar-tarea', (tarea) => {
+    io.to(tarea.proyecto._id).emit('tarea-completada', tarea);
+  });
 });

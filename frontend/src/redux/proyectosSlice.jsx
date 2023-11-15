@@ -115,6 +115,11 @@ export const {
 
 export default proyectosSlice.reducer;
 
+export const cerrarSesionProyectosAction = () => (dispatch) => {
+  dispatch(obtenerProyectos([]));
+  dispatch(obtenerProyecto({}));
+};
+
 export const mostrarAlertaAction = (alerta) => (dispatch) => {
   dispatch(mostrarAlerta(alerta));
   setTimeout(() => {
@@ -512,7 +517,8 @@ export const completarTareaAction = (idTarea) => async (dispatch) => {
       config
     );
 
-    dispatch(actualizarTarea(data));
+    socket.emit('completar-tarea', data);
+
     dispatch(
       mostrarAlertaAction({
         msg: data.msg,
