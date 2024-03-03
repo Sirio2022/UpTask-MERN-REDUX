@@ -2,7 +2,6 @@ import Usuario from '../models/Usuario.js';
 import generarId from '../helpers/generarId.js';
 import generarJWT from '../helpers/generarJWT.js';
 import { emailRegistration, emailOlvidePassword } from '../helpers/emails.js';
-import e from 'express';
 
 const registar = async (req, res) => {
   // Evitar duplicados
